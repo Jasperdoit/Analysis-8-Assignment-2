@@ -115,7 +115,7 @@ class database:
             return None
         else:
             return result
-    def add_admin(admin) -> None:
+    def add_admin(admin : tuple) -> None:
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -124,7 +124,7 @@ class database:
             """
             INSERT INTO systemadmin (username, password_hash, first_name, last_name, registration_date, role)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (admin.username, admin.password, admin.firstName, admin.lastName, admin.registrationDate, admin.role))
+        """, (admin[0], admin[1], admin[2], admin[3], admin[4], admin[5]))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -240,7 +240,57 @@ class database:
         # Commit the changes and close the connection
         conn.commit()
 
+    def get_systemadmin_by_keyword(keyword : str) -> tuple:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
 
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM systemadmin
+            WHERE username LIKE ? OR
+                first_name LIKE ? OR
+                last_name LIKE ? OR
+                registration_date LIKE ? OR
+                role LIKE ?
+        """
+
+        keyword = f"%{keyword}%"
+
+        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword))
+        result = cursor.fetchone()
+        if result is None:
+            return None
+        else:
+            if result[5] == "superadmin":
+                return None
+            return result
+
+    def update_systemadmin(username : str, systemadmin : tuple):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            UPDATE systemadmin SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?, role = ?
+            WHERE username = ?
+        """, (systemadmin[0], systemadmin[1], systemadmin[2], systemadmin[3], systemadmin[4], systemadmin[5], username))
+
+        # Commit the changes and close the connection
+        conn.commit()
+    
+    def delete_systemadmin(username : str):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            DELETE FROM systemadmin WHERE username = ?
+        """, (username,))
+
+        # Commit the changes and close the connection
+        conn.commit()
 
 
 

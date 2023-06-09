@@ -10,6 +10,17 @@ from trainermodifier import trainermodifier
 class SystemAdmin(Trainer):
   def __init__(self, username, password, firstName, lastName, registrationDate = datetime.now()):
     super().__init__(username, password, firstName, lastName, registrationDate)
+    self.role = "systemadmin"
+
+  def check_users():
+    # List all trainers, systemadmins in the system and their role.
+    trainers : list[Trainer] = database.database.get_all_trainers() or list()
+    systemadmins : list[SystemAdmin] = database.database.get_all_systemadmins() or list()
+    for trainer in trainers:
+      print(f"Trainer: {trainer[1]} - {trainer[3]}")
+    for systemadmin in systemadmins:
+      print(f"SystemAdmin: {systemadmin[1], systemadmin[6]}")
+    input("Press enter to continue...")
 
   def add_trainer() -> None:
     print("[!] Adding trainer.")
@@ -57,7 +68,8 @@ class SystemAdmin(Trainer):
     print("")
     print("[1] Modify trainer")
     print("[2] Delete trainer")
-    print("[3] Go back")
+    print("[3] Reset password")
+    print("[4] Go back")
 
     choice = input("Enter choice: ")
 
@@ -66,6 +78,8 @@ class SystemAdmin(Trainer):
     elif choice == "2":
       trainermodifier.delete_trainer(trainer)
     elif choice == "3":
+      trainermodifier.reset_trainer_password(trainer)
+    elif choice == "4":
       return
     else:
       input("[!] Invalid choice.")
