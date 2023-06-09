@@ -1,24 +1,75 @@
-from database import Database
+# from database import Database
+import logging
+import base64
+import os
+from datetime import datetime
+
+
 class Logger:
     def __init__(self):
-        pass
-    def display_log(test):
-        t = Table(["No.", "Date", "Time", "Username", "Description of activity", "Additional Information", "Suspicious"])
-        t.add_row(["1", "testtesttest", "test", "test", "test", "test", "test"])
-        t.add_row(["2", "test", "test", "test", "test", "test", "test"])
-        t.add_row(["3", "test", "test", "test", "test", "test", "test"])
-        t.add_row(["4", "test", "test", "test", "test", "test", "test"])
+        # self.key = "dhg74n3fg2"
+        self.key = "g"
+        self.delimiter = ","
+
+    def _encrypt_message(self, lst: list[str]) -> str:
+        # Simple XOR encryption
+        encrypted_message = ""
+        message = self.delimiter.join(lst)
+        for char in message:
+            encrypted_char = chr(ord(char) ^ ord(self.key))
+            encrypted_message += encrypted_char
+        return encrypted_message
+
+    def _decrypt_message(self, encrypted_message: str) -> str:
+        # Simple XOR decryption
+        decrypted_message = ""
+        for char in encrypted_message:
+            decrypted_char = chr(ord(char) ^ ord(self.key))
+            decrypted_message += decrypted_char
+        return decrypted_message
+
+    def write_to_log(self, lst: list[str]):
+        fileToCheck = f'{datetime.now().strftime("%Y-%m-%d")}.log'
+        encrypted_log = self._encrypt_message(lst)
+        encoded_log = base64.b64encode(encrypted_log.encode())
+        if os.path.exists(fileToCheck):
+            with open(fileToCheck, 'ab') as file:
+                file.write(encoded_log + b'\n')
+
+        else:
+            with open(fileToCheck, 'wb') as file:
+                file.write(encoded_log + b'\n')
+
+    def read_from_log(self):
+        t = Table()
+        data = list[list]()
+        with open(f'{datetime.now().strftime("%Y-%m-%d")}.log', 'rb') as file:
+            encoded_lines = file.readlines()
+            for line in encoded_lines:
+                decoded_log = base64.b64decode(line)
+                decrypted_log = self._decrypt_message(decoded_log.decode())
+                data.append(decrypted_log.split(self.delimiter))
+        for line in data:
+            t.add_row(line)
         t.print_table()
+
+    def get_log_length(self) -> int:
+        try:
+            with open(f'{datetime.now().strftime("%Y-%m-%d")}.log', 'r') as file:
+                return len(file.readlines())
+        except:
+            return 0
+            pass
 
 
 class Table:
-    def __init__(self, headers, border=' | ', bot_char='-'):
-        self.headers = headers
-        self.columns = len(headers)
+    def __init__(self, border=' | ', bot_char='-'):
+        self.headers = ["No.", "Date", "Time", "Username", "Description of activity", "Additional Information", "Suspicious"]
+        self.columns = len(self.headers)
         self.border = border
         self.bot_char = bot_char
         self.data = []
-        self.max_widths = [len(str(header)) for header in headers]
+        self.max_widths = [len(str(header)) for header in self.headers]
 
     def add_row(self, row):
         if len(row) != self.columns:
@@ -37,8 +88,8 @@ class Table:
         # Print the headers
         header_str = self.border.join(header.center(self.max_widths[i]) for i, header in enumerate(self.headers))
         header_row = f"{self.border} {header_str} {self.border}"
-        print(header_row)
 
+        print(header_row)
         print(border_row)
 
         # Print the table rows
