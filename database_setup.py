@@ -23,6 +23,9 @@ def setup_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            registration_date TIMESTAMP NOT NULL,
             role TEXT NOT NULL
         )
     """)

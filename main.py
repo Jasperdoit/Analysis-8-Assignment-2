@@ -3,7 +3,7 @@ import hashlib
 import re
 import random
 from trainer import Trainer as tr
-import database as db
+from database import database as db
 from systemadmin import SystemAdmin
 from superadmin import SuperAdmin
 from string import ascii_letters, digits, punctuation
@@ -11,7 +11,6 @@ from database_setup import setup_database
 import os
 import sys
 import passwordmanager
-import database
 
 def get_user_role(username):
     cursor.execute("SELECT role FROM systemadmin WHERE username = ?", (username,))
@@ -148,7 +147,7 @@ def showTrainerMenu():
   showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
-    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
+    systemAdminOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -166,7 +165,7 @@ def showSystemAdminMenu():
     showMenuOptions(systemAdminOptions, showTrainerMenu)
 
 def showSuperAdminMenu():
-    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "14": db.delete_member }
+    superAdminOptions = { "1": SuperAdmin.check_users, "2": SystemAdmin.add_trainer, "3": SystemAdmin.view_trainer, "4": tr.search_member, "5": Login, "14": db.delete_member }
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -216,12 +215,12 @@ def add_test_member():
         conn.close()
 
 
+
 if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
-    #add_test_trainer()
-    add_test_member()
+    SuperAdmin.view_trainer()
     ShowMenu()
 
     

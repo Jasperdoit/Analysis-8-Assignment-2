@@ -9,11 +9,12 @@ class SuperAdmin(SystemAdmin):
     super().__init__(username, password, firstName, lastName, registrationDate)
     self.role = "superadmin"
   
-  def check_users(self):
+  def check_users():
     # List all trainers, systemadmins in the system and their role.
     trainers : list[Trainer] = database.database.get_all_trainers() or list()
     systemadmins : list[SystemAdmin] = database.database.get_all_systemadmins() or list()
     for trainer in trainers:
-      print(f"Trainer: {trainer.username} - {trainer.role}")
+      print(f"Trainer: {trainer[1]} - {trainer[3]}")
     for systemadmin in systemadmins:
-      print(f"SystemAdmin: {systemadmin.username} - {systemadmin.role}")
+      print(f"SystemAdmin: {systemadmin[1], systemadmin[6]}")
+    input("Press enter to continue...")

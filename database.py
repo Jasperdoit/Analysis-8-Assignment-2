@@ -90,7 +90,7 @@ class database:
 
         # Query to search for a member based on various fields
         query = """
-            SELECT * FROM SystemAdmins
+            SELECT * FROM systemadmin
         """
 
         cursor.execute(query)
@@ -148,7 +148,98 @@ class database:
             input(f"Error deleting member: {e}")
         finally:
             # Close the database connection
-            conn.close()        
+            conn.close()
+
+    def username_exists(username : str) -> bool:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM systemadmin
+            WHERE username = ?
+        """
+
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()
+        if not result is None:
+            return True
+
+        query = """
+            SELECT * FROM Trainers
+            WHERE username = ?
+        """
+
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()
+        if not result is None:
+            return True
+        return False
+    
+    def get_trainer_by_keyword(keyword : str) -> tuple:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM Trainers
+            WHERE username LIKE ? OR
+                first_name LIKE ? OR
+                last_name LIKE ? OR
+                registration_date LIKE ? OR
+                role LIKE ?
+        """
+
+        keyword = f"%{keyword}%"
+
+        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword))
+        result = cursor.fetchone()
+        if result is None:
+            return None
+        else:
+            return result
+
+    def add_trainer(trainer : tuple):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date, role)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], trainer[5]))
+
+        # Commit the changes and close the connection
+        conn.commit()
+
+    def update_trainer(username : str, trainer : tuple):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            UPDATE Trainers SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?, role = ?
+            WHERE username = ?
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], trainer[5], username))
+
+        # Commit the changes and close the connection
+        conn.commit()
+
+    def delete_trainer(username : str):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            DELETE FROM Trainers WHERE username = ?
+        """, (username,))
+
+        # Commit the changes and close the connection
+        conn.commit()
+
 
 
 

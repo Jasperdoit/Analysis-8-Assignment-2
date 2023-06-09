@@ -3,6 +3,7 @@ import re
 import sqlite3
 import hashlib
 from database import database as db
+from datetime import datetime
 
 
 class Trainer:
@@ -13,7 +14,7 @@ class Trainer:
         self.firstName : str = firstName
         self.lastName : str = lastName
         self.registrationDate : datetime = registrationDate
-        self.role : str = "Trainer"
+        self.role : str = "trainer"
 
     def set_first_name(self, firstName : str):
         self.firstName = firstName
@@ -158,4 +159,10 @@ class Trainer:
             break
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
+    def to_tuple(self):
+        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate, self.role)
+    def from_tuple(tuple) -> 'Trainer':
+        trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
+        trainer.id = tuple[0]
+        return trainer
 
