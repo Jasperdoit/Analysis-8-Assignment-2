@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3
 import hashlib
+from database import database as db
 
 
 class Trainer:
@@ -15,143 +16,159 @@ class Trainer:
         # Regex pattern to validate password
         pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,30}$'
         return re.match(pattern, password) is not None
+    
+    
+        # Checks for valid username.
+    def is_valid_username(username):
+        # Regex pattern to validate username
+        pattern = r'^[a-zA-Z_][a-zA-Z0-9_]{7,11}$'
+        return re.match(pattern, username) is not None
+    
+    def is_valid_gender(gender):
+        # List of valid gender options
+        valid_genders = ['M', 'F']
+        return gender.lower() in valid_genders
+
+    def is_valid_number(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
 
     def update_password():
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
         while True:
             print("[!] Changing password.")
             new_password = input("[+] Enter your new password:")
-            if is_valid_password(new_password):
+            if Trainer.is_valid_password(new_password):
                 # Hash the password
                 hashed_password = hashlib.sha256(
                     new_password.encode()).hexdigest()
 
                 # Update the password in the database for the logged-in user
                 cursor.execute(
-                    "UPDATE Trainers SET password = ? WHERE username = ?",
-                    (hashed_password, logged_in_user))
-                connection.commit()
+                    "UPDATE Trainers SET password_hash = ? WHERE username = ?",
+                    (hashed_password, "testtest1"))
+                conn.commit()
 
                 print("[!] Password changed successfully.")
-                input("Press any key to continue.")
+                input("Press 'Enter' to continue.")
                 break
             else:
                 print(
                     "[!] Invalid password format. Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be 12-30 characters long."
                 )
 
-    def add_member(self, member_id, first_name, last_name, age, gender, weight,
-                   address, email, phone):
-        # Connect to the SQLite database
+    def modify_member():
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
-
-        # Insert the member data into the Members table
-        cursor.execute(
-            """
-            INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, address, email, phone, registration_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (member_id, first_name, last_name, age, gender, weight, address,
-              email, phone, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-
-        # Commit the changes and close the connection
-        conn.commit()
-
-    def modify_member():
         # Implement the logic to modify a member's information
-        search_member()
+        Trainer.search_member()
+        print("[!] Selecting member.")
 
         while True:
-            print(f"\n[1] Edit firstname: '{mem.givenName}'")
-            print(f"[2] Edit surname: '{mem.surname}'")
-            print(f"[3] Edit age: '{mem.surname}'")
-            print(f"[4] Edit gender: '{mem.surname}'")
-            print(f"[5] Edit weight: '{mem.surname}'")
-            print(f"[6] Edit address: '{mem.streetAddress}'")
-            print(f"[7] Edit email address: '{mem.zipcode}'")
-            print(f"[8] Edit phone number: '{mem.city}'")
+            search_key = input("[+] Choose a member by ID:")
+            if Trainer.is_valid_number(search_key) == False:
+                input("[!] Not a valid ID. Try again.")
+            else:
+                break
+
+
+        while True:
+            print(f"[1] Edit firstname.")
+            print(f"[2] Edit surname.'")
+            print(f"[3] Edit age.")
+            print(f"[4] Edit gender.")
+            print(f"[5] Edit weight.")
+            print(f"[6] Edit address.")
+            print(f"[7] Edit email address.")
+            print(f"[8] Edit phone number.")
             print(f"[9] Go back.")
             inp = input("\n[?] Option: ")
 
             if inp == "1":
-                print(f"\n[+] Current value: {mem.givenName}")
-                mem.givenName = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET first_name = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
+                break
             elif inp == "2":
-                print(f"[+] Current value: {mem.surname}")
-                mem.surname = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET last_name = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "3":
-                print(f"[+] Current value: {mem.streetAddress}")
-                mem.streetAddress = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET age = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "4":
-                print(f"[+] Current value: {mem.zipcode}")
-                mem.zipcode = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET gender = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "5":
-                print(f"[+] Current value: {mem.city}")
-                mem.city = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET weight = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "6":
-                print(f"[+] Current value: {mem.emailAddress}")
-                mem.emailAddress = input("[+] New value: ")
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET address = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "7":
-                print(f"[+] Current value: {mem.username}")
-                username = input("[+] New value: ")
-                for mem in Member.get_Members():
-                    if username == mem.username:
-                        input(
-                            "[!] A username with the same name was found, please pick a different username."
-                        )
-                        break
-                else:
-                    mem.username = username
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET email = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
             elif inp == "8":
-                print(f"[+] Current value: {mem.password}")
-                mem.password = input("[+] New value: ")
-                break
+                value = input("[+] New value: ")
+                query = f"UPDATE Members SET phone = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
             elif inp == "9":
-                print(f"[+] Current value: {mem.phoneNumber}")
-                mem.phoneNumber = input("[+] New value: ")
-                break
-            elif inp == "10":
                 return
             else:
                 continue
+        conn.commit()
         print("\n[!] Member value was successfully changed!")
-        return input("[!] Press 'Enter' to continue.")
+        input("[!] Press 'Enter' to continue.")
 
     def search_member():
-        conn = sqlite3.connect("fitplus.db")
-        cursor = conn.cursor()
         print("[!] Searching member.")
         search_key = input("[+] Search for member:")
+        db.get_members(search_key)
 
-        # Query to search for a member based on various fields
-        query = """
-            SELECT * FROM Members
-            WHERE id LIKE ? OR
-                  first_name LIKE ? OR
-                  last_name LIKE ? OR
-                  address LIKE ? OR
-                  email LIKE ? OR
-                  phone LIKE ?
-        """
+    def adding_member():
+        print("[!] Adding member.")
+        first_name = input("[+] Enter first name:")
+        last_name = input("[+] Enter last name:")
 
-        # Prepare the search key with wildcard characters for partial matching
-        search_key = '%' + search_key + '%'
+        while True:
+            age = input("[+] Enter age (number):")
+            if Trainer.is_valid_number(age) == False:
+                input("[!] Not a valid number")
+            else:
+                break
+        
+        while True:
+            gender = input("[+] Enter gender:")
+            if Trainer.is_valid_gender(gender) == False:
+                input("[!] Not a gender. Enter 'M' or 'F'")
+            else: 
+                break
 
-        # Execute the query with the search key for each field
-        cursor.execute(query, (search_key, search_key, search_key, search_key,
-                               search_key, search_key))
-        result = cursor.fetchall()
+        while True:
+            weight = input("[+] Enter weight (kg):")
+            if Trainer.is_valid_number(weight) == False:
+                input("[!] Not a valid number")
+            else:
+                break
 
-        if result:
-            print("Search results:")
-            # Process the search results as needed
-            for row in result:
-                print(row)  # Example: Print the member details
-        else:
-            print("No matching members found.")
+        address = input("[+] Enter address:")
+        email = input("[+] Enter email address:")
+        phone = input("[+] Enter phone number:")
 
-        input("Press any key to continue.")
+        db.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
+

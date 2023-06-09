@@ -3,6 +3,7 @@ import hashlib
 import re
 import random
 from trainer import Trainer as tr
+import database as db
 from systemadmin import SystemAdmin
 from superadmin import SuperAdmin
 from string import ascii_letters, digits, punctuation
@@ -18,6 +19,11 @@ def get_user_role(username):
     else:
         return None
 
+    # Checks if the password is correct and uses allowed characters.
+def is_valid_password(password):
+    # Regex pattern to validate password
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,30}$'
+    return re.match(pattern, password) is not None
 
 # Hashes the password of the user.
 def hash_password(password):
@@ -78,15 +84,6 @@ def Login():
     else:
         DisplayError("Invalid user role.")
 
-def make_menu(function, options):
-    print(f"{function} menu. Select an option.")
-    print("---")
-    index = 1
-    for option in options:
-        print(f"[{index}] {option}")
-        index +=1
-    print("[0] Exit")
-
 def validate_username(username):
     if not is_valid_username(username):
         return False
@@ -138,7 +135,7 @@ def Exit():
     sys.exit()
 
 def showTrainerMenu():
-  trainerOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+  trainerOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
   print("[!] This is the trainer menu.")
   print("[+] Please Choose an option.")
   print("[1] Update password.")
@@ -149,7 +146,7 @@ def showTrainerMenu():
   showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
-    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -167,7 +164,7 @@ def showSystemAdminMenu():
     showMenuOptions(systemAdminOptions, showTrainerMenu)
 
 def showSuperAdminMenu():
-    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "14": db.delete_member }
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -197,12 +194,32 @@ def add_test_trainer():
     conn.commit()
     print("Test trainer added successfully.")
 
+def add_test_member():
+    # Connect to the database
+    conn = sqlite3.connect("fitplus.db")
+    cursor = conn.cursor()
+
+    try:
+        # Insert a test member
+        cursor.execute("""
+            INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, address, email, phone)
+            VALUES ('001', 'John', 'Doe', 25, 'Male', 70.5, '123 Street', 'john@example.com', '123456789')
+        """)
+        conn.commit()
+        print("Test member added successfully.")
+    except sqlite3.Error as e:
+        print(f"Error adding test member: {e}")
+    finally:
+        # Close the database connection
+        conn.close()
+
 
 if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
     #add_test_trainer()
+    add_test_member()
     ShowMenu()
 
 
