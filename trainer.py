@@ -91,29 +91,47 @@ class Trainer:
 
             if inp == "1":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET first_name = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
+                break
             elif inp == "2":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET last_name = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "3":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET age = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "4":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET gender = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "5":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET weight = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "6":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET address = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
                 break
             elif inp == "7":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET email = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
             elif inp == "8":
                 value = input("[+] New value: ")
+                query = f"UPDATE Members SET phone = ? WHERE id = {search_key}"
+                cursor.execute(query, (value))
             elif inp == "9":
                 return
             else:
                 continue
+        conn.commit()
         print("\n[!] Member value was successfully changed!")
         input("[!] Press 'Enter' to continue.")
 
@@ -123,26 +141,34 @@ class Trainer:
         db.get_members(search_key)
 
     def adding_member():
+        print("[!] Adding member.")
+        first_name = input("[+] Enter first name:")
+        last_name = input("[+] Enter last name:")
+
         while True:
-            print("[!] Adding member.")
-            first_name = input("[+] Enter first name:")
-            last_name = input("[+] Enter last name:")
             age = input("[+] Enter age (number):")
             if Trainer.is_valid_number(age) == False:
                 input("[!] Not a valid number")
-                continue
+            else:
+                break
+        
+        while True:
             gender = input("[+] Enter gender:")
             if Trainer.is_valid_gender(gender) == False:
                 input("[!] Not a gender. Enter 'M' or 'F'")
-                continue
+            else: 
+                break
+
+        while True:
             weight = input("[+] Enter weight (kg):")
             if Trainer.is_valid_number(weight) == False:
                 input("[!] Not a valid number")
-                continue
-            address = input("[+] Enter address:")
-            email = input("[+] Enter email address:")
-            phone = input("[+] Enter phone number:")
-            break
+            else:
+                break
+            
+        address = input("[+] Enter address:")
+        email = input("[+] Enter email address:")
+        phone = input("[+] Enter phone number:")
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
 
