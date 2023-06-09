@@ -19,7 +19,7 @@ class Member():
         self.age: int = age
 
     def setGender(gender: str) -> str:
-        if gender != "male" and gender != "female":
+        if gender != "M" and gender != "F":
             return "error"
         self.gender: str = gender
         return "sucess"
