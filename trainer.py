@@ -26,7 +26,7 @@ class Trainer:
     
     def is_valid_gender(gender):
         # List of valid gender options
-        valid_genders = ['male', 'female']
+        valid_genders = ['M', 'F']
         return gender.lower() in valid_genders
 
     def is_valid_number(value):
@@ -165,7 +165,7 @@ class Trainer:
                 input("[!] Not a valid number")
             else:
                 break
-            
+
         address = input("[+] Enter address:")
         email = input("[+] Enter email address:")
         phone = input("[+] Enter phone number:")
