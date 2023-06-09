@@ -1,15 +1,17 @@
+import os
+import sys
 import sqlite3
 import hashlib
 import re
 import random
-from trainer import Trainer as tr
 import database as db
+
+from trainer import Trainer as tr
 from systemadmin import SystemAdmin
 from superadmin import SuperAdmin
 from string import ascii_letters, digits, punctuation
 from database_setup import setup_database
-import os
-import sys
+
 
 def get_user_role(username):
     cursor.execute("SELECT role FROM systemadmin WHERE username = ?", (username,))
@@ -106,6 +108,7 @@ def DisplayError(error):
 def ShowMenu():
   menuOptions = { "1": Login, "2": Exit }
   clearConsole()
+
   print("[!] Welcome to Fitplus!")
   print("[+] Please Choose an option.")
   print("[1] Log in")
@@ -215,6 +218,9 @@ def add_test_member():
 
 
 if __name__ == "__main__":
+    if not os.path.exists('./logs'):
+        os.mkdir('./logs')
+
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()

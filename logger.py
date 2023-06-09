@@ -29,7 +29,7 @@ class Logger:
         return decrypted_message
 
     def write_to_log(self, lst: list[str]):
-        fileToCheck = f'{datetime.now().strftime("%Y-%m-%d")}.log'
+        fileToCheck = os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log')
         encrypted_log = self._encrypt_message(lst)
         encoded_log = base64.b64encode(encrypted_log.encode())
         if os.path.exists(fileToCheck):
@@ -43,7 +43,7 @@ class Logger:
     def read_from_log(self):
         t = Table()
         data = list[list]()
-        with open(f'{datetime.now().strftime("%Y-%m-%d")}.log', 'rb') as file:
+        with open(os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log'), 'rb') as file:
             encoded_lines = file.readlines()
             for line in encoded_lines:
                 decoded_log = base64.b64decode(line)
@@ -53,14 +53,31 @@ class Logger:
             t.add_row(line)
         t.print_table()
 
-    def get_log_length(self) -> int:
-        try:
-            with open(f'{datetime.now().strftime("%Y-%m-%d")}.log', 'r') as file:
-                return len(file.readlines())
-        except:
-            return 0
-            pass
 
+class LogMessage:
+    def __init__(self):
+        self.no = get_log_length()
+        self.date = datetime.now().strftime("%Y-%m-%d")
+        self.time = datetime.now().strftime("%H:%M:%S")
+        self.username = str
+        self.activity = str
+        self.info = str
+        self.suspicious = str
+
+    def set_username(self, username: str):
+        self.username = username
+
+    def set_activity(self, activity: str):
+        self.activity = activity
+
+    def set_info(self, info: str):
+        self.info = info
+
+    def set_sussy(self, suspicious: str):
+        self.suspicious = suspicious
+
+    def create_log(self) -> list[str]:
+        return f'{self.no},{self.date},{self.time},{self.username},{self.activity},{self.info},{self.suspicious}'.split(',')
 
 class Table:
     def __init__(self, border=' | ', bot_char='-'):
@@ -99,3 +116,10 @@ class Table:
             print(row_row)
 
         print(border_row)
+
+def get_log_length() -> int:
+    try:
+        with open(os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
+            return len(file.readlines()) + 1
+    except:
+        return 1
