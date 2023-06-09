@@ -5,10 +5,12 @@ from passwordmanager import passwordmanager
 from security import security
 class adminmodifier:
     def update_systemadmin(systemadmin : SystemAdmin, old_username : str) -> None:
+        """Updates a systemadmin in the database. The old username is used to identify the systemadmin in the database."""
         systemadmin : tuple = SystemAdmin.to_tuple(systemadmin)
         database.update_systemadmin(old_username, systemadmin)
 
     def reset_systemadmin_password(systemadmin : SystemAdmin):
+        """Prompts the user to confirm the reset of the password of the systemadmin. If the user confirms, a new password is generated and displayed to the user. The new password is displayed to the user."""
         display.clearConsole()
         print("[!] Resetting password.")
         print("[!] This will generate a new password. Make sure to write it down.")
@@ -29,6 +31,7 @@ class adminmodifier:
         input("Press enter to continue...")
 
     def modify_systemadmin_username(systemadmin : SystemAdmin):
+        """promts the user to enter a new username. If the username is valid and not already taken, the username is changed."""
         previous_username : str = systemadmin.username
         display.clearConsole()
         print("[!] Changing username.")
@@ -48,6 +51,7 @@ class adminmodifier:
         input("Press enter to continue...")
 
     def modify_systemadmin_password(systemadmin : SystemAdmin):
+        """prompts the user to enter a new password. If the password is valid, the password is changed."""
         previous_username : str = systemadmin.username
         display.clearConsole()
         print("[!] Changing password.")
@@ -64,6 +68,7 @@ class adminmodifier:
         input("Press enter to continue...")
 
     def modify_systemadmin_firstname(systemadmin : SystemAdmin):
+        """prompts the user to enter a new first name. The first name is changed regardless of input."""
         previous_username : str = systemadmin.username
         display.clearConsole()
         print("[!] Changing first name.")
@@ -75,6 +80,7 @@ class adminmodifier:
         input("Press enter to continue...")
 
     def modify_systemadmin_lastname(systemadmin : SystemAdmin):
+        """prompts the user to enter a new last name. The last name is changed regardless of input."""
         previous_username : str = systemadmin.username
         display.clearConsole()
         print("[!] Changing last name.")
@@ -86,6 +92,7 @@ class adminmodifier:
         input("Press enter to continue...")
     
     def delete_systemadmin(systemadmin : SystemAdmin):
+        """prompts the user to confirm the deletion of the systemadmin. If the user confirms, the systemadmin is deleted from the database."""
         display.clearConsole()
         print(f"[!] You are about to delete the SystemAdmin {systemadmin.username}. This action cannot be undone.")
         confirmation = input("[+] Are you sure you want to continue? (y/n):")

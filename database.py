@@ -151,6 +151,7 @@ class database:
             conn.close()
 
     def username_exists(username : str) -> bool:
+        """returns True if the username exists, False otherwise."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -177,6 +178,7 @@ class database:
         return False
     
     def get_trainer_by_keyword(keyword : str) -> tuple:
+        """returns a tuple of the trainer's data if found, None otherwise."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -200,6 +202,7 @@ class database:
             return result
 
     def add_trainer(trainer : tuple):
+        """adds a trainer to the database. Make sure all proper checks are done before calling this function."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -214,6 +217,7 @@ class database:
         conn.commit()
 
     def update_trainer(username : str, trainer : tuple):
+        """updates the information of a trainer in the database based on their username. Make sure all proper checks are done before calling this function."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -228,6 +232,7 @@ class database:
         conn.commit()
 
     def delete_trainer(username : str):
+        """Deletes a trainer from the database based on their username."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -241,6 +246,7 @@ class database:
         conn.commit()
 
     def get_systemadmin_by_keyword(keyword : str) -> tuple:
+        """returns a tuple of the systemadmin's data if found, None otherwise."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -266,6 +272,7 @@ class database:
             return result
 
     def update_systemadmin(username : str, systemadmin : tuple):
+        """Updates the information of a systemadmin in the database based on their username. Make sure all proper checks are done before calling this function."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -280,6 +287,7 @@ class database:
         conn.commit()
     
     def delete_systemadmin(username : str):
+        """Deletes a systemadmin from the database based on their username."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 

@@ -5,10 +5,12 @@ from passwordmanager import passwordmanager
 from display import display
 class trainermodifier:
     def update_trainer(trainer : Trainer, old_username : str) -> None:
+        """Updates a trainer in the database. The trainer is identified by the old username, if this one is changed."""
         trainer : tuple = Trainer.to_tuple(trainer)
         database.update_trainer(old_username, trainer)
 
     def reset_trainer_password(trainer : Trainer):
+        """Promts the user for confirmation and resets the password of the trainer. The new password is displayed to the user."""
         display.clearConsole()
         print("[!] Resetting password.")
         print("[!] This will generate a new password. Make sure to write it down.")
@@ -29,6 +31,7 @@ class trainermodifier:
         input("Press enter to continue...")
 
     def modify_trainer_username(trainer : Trainer):
+        """Prompts the user for a new username and changes the username of the trainer. The username is validated before it is changed."""
         previous_username : str = trainer.username
         display.clearConsole()
         print("[!] Changing username.")
@@ -48,6 +51,7 @@ class trainermodifier:
         input("Press enter to continue...")
 
     def modify_trainer_password(trainer : Trainer):
+        """Prompts the user for a new password and changes the password of the trainer. The password is validated before it is changed."""
         previous_username : str = trainer.username
         display.clearConsole()
         print("[!] Changing password.")
@@ -64,6 +68,7 @@ class trainermodifier:
         input("Press enter to continue...")
 
     def modify_trainer_firstname(trainer : Trainer):
+        """Prompts the user for a new first name and changes the first name of the trainer."""
         previous_username : str = trainer.username
         display.clearConsole()
         print("[!] Changing first name.")
@@ -75,6 +80,7 @@ class trainermodifier:
         input("Press enter to continue...")
 
     def modify_trainer_lastname(trainer : Trainer):
+        """Prompts the user for a new last name and changes the last name of the trainer."""
         previous_username : str = trainer.username
         display.clearConsole()
         print("[!] Changing last name.")
@@ -86,6 +92,7 @@ class trainermodifier:
         input("Press enter to continue...")
     
     def delete_trainer(trainer : Trainer):
+        """Prompts the user for confirmation and deletes the trainer from the database."""
         display.clearConsole()
         print(f"[!] You are about to delete the trainer {trainer.username}. This action cannot be undone.")
         confirmation = input("[+] Are you sure you want to continue? (y/n):")
