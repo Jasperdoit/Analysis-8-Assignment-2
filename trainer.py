@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3
 import hashlib
+import database
 
 
 class Trainer:
@@ -20,7 +21,7 @@ class Trainer:
         while True:
             print("[!] Changing password.")
             new_password = input("[+] Enter your new password:")
-            if is_valid_password(new_password):
+            if Trainer.is_valid_password(new_password):
                 # Hash the password
                 hashed_password = hashlib.sha256(
                     new_password.encode()).hexdigest()
@@ -39,26 +40,13 @@ class Trainer:
                     "[!] Invalid password format. Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be 12-30 characters long."
                 )
 
-    def add_member(self, member_id, first_name, last_name, age, gender, weight,
-                   address, email, phone):
-        # Connect to the SQLite database
-        conn = sqlite3.connect("fitplus.db")
-        cursor = conn.cursor()
-
-        # Insert the member data into the Members table
-        cursor.execute(
-            """
-            INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, address, email, phone, registration_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (member_id, first_name, last_name, age, gender, weight, address,
-              email, phone, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-
-        # Commit the changes and close the connection
-        conn.commit()
-
     def modify_member():
         # Implement the logic to modify a member's information
-        search_member()
+        Trainer.search_member()
+        print("[!] Selecting member.")
+        search_key = input("[+] Choose a member by ID:")
+        #TODO: ADD CHECKS TO SEE IF KEY IS NUMBER
+
 
         while True:
             print(f"\n[1] Edit firstname: '{mem.givenName}'")
@@ -122,36 +110,20 @@ class Trainer:
         return input("[!] Press 'Enter' to continue.")
 
     def search_member():
-        conn = sqlite3.connect("fitplus.db")
-        cursor = conn.cursor()
         print("[!] Searching member.")
         search_key = input("[+] Search for member:")
+        get_members(search_key)
 
-        # Query to search for a member based on various fields
-        query = """
-            SELECT * FROM Members
-            WHERE id LIKE ? OR
-                  first_name LIKE ? OR
-                  last_name LIKE ? OR
-                  address LIKE ? OR
-                  email LIKE ? OR
-                  phone LIKE ?
-        """
+    def adding_member():
+        print("[!] Adding member.")
+        first_name = input("[+] Enter first name:")
+        last_name = input("[+] Enter first name:")
+        age = input("[+] Enter age (number):")
+        gender = input("[+] Enter first name:")
+        weight = input("[+] Enter weight (kg):")
+        address = input("[+] Enter address:")
+        email = input("[+] Enter email address:")
+        phone = input("[+] Enter phone number:")
 
-        # Prepare the search key with wildcard characters for partial matching
-        search_key = '%' + search_key + '%'
+        add_member(first_name, last_name, age, gender, weight, address, email, phone)   
 
-        # Execute the query with the search key for each field
-        cursor.execute(query, (search_key, search_key, search_key, search_key,
-                               search_key, search_key))
-        result = cursor.fetchall()
-
-        if result:
-            print("Search results:")
-            # Process the search results as needed
-            for row in result:
-                print(row)  # Example: Print the member details
-        else:
-            print("No matching members found.")
-
-        input("Press any key to continue.")

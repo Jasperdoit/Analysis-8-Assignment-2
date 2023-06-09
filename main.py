@@ -18,6 +18,11 @@ def get_user_role(username):
     else:
         return None
 
+    # Checks if the password is correct and uses allowed characters.
+def is_valid_password(password):
+    # Regex pattern to validate password
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,30}$'
+    return re.match(pattern, password) is not None
 
 # Hashes the password of the user.
 def hash_password(password):
@@ -78,15 +83,6 @@ def Login():
     else:
         DisplayError("Invalid user role.")
 
-def make_menu(function, options):
-    print(f"{function} menu. Select an option.")
-    print("---")
-    index = 1
-    for option in options:
-        print(f"[{index}] {option}")
-        index +=1
-    print("[0] Exit")
-
 def validate_username(username):
     if not is_valid_username(username):
         return False
@@ -138,7 +134,7 @@ def Exit():
     sys.exit()
 
 def showTrainerMenu():
-  trainerOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+  trainerOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
   print("[!] This is the trainer menu.")
   print("[+] Please Choose an option.")
   print("[1] Update password.")
