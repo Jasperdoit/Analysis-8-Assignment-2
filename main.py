@@ -9,6 +9,8 @@ from string import ascii_letters, digits, punctuation
 from database_setup import setup_database
 import os
 import sys
+import passwordmanager
+import database
 
 def get_user_role(username):
     cursor.execute("SELECT role FROM systemadmin WHERE username = ?", (username,))
@@ -145,7 +147,7 @@ def showTrainerMenu():
   showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
-    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+    systemAdminOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -163,7 +165,7 @@ def showSystemAdminMenu():
     showMenuOptions(systemAdminOptions, showTrainerMenu)
 
 def showSuperAdminMenu():
-    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
+    superAdminOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -198,7 +200,10 @@ if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
-    #add_test_trainer()
     ShowMenu()
+
+    
+    
+
 
 

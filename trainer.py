@@ -3,13 +3,27 @@ import re
 import sqlite3
 import hashlib
 import database
+from datetime import datetime
 
 
 class Trainer:
 
-    def __init__(self, username, options):
-        self.username = username
-        self.options = options
+    def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
+        self.username : str = username
+        self.password : str = password
+        self.firstName : str = firstName
+        self.lastName : str = lastName
+        self.registrationDate : datetime = registrationDate
+        self.role : str = "Trainer"
+
+    def set_first_name(self, firstName : str):
+        self.firstName = firstName
+
+    def set_last_name(self, lastName : str):
+        self.lastName = lastName
+
+    def set_registration_date(self, registrationDate : datetime):
+        self.registrationDate = registrationDate
 
         # Checks if the password is correct and uses allowed characters.
     def is_valid_password(password):
@@ -112,7 +126,7 @@ class Trainer:
     def search_member():
         print("[!] Searching member.")
         search_key = input("[+] Search for member:")
-        get_members(search_key)
+        database.database.get_members(search_key)
 
     def adding_member():
         print("[!] Adding member.")
@@ -125,5 +139,5 @@ class Trainer:
         email = input("[+] Enter email address:")
         phone = input("[+] Enter phone number:")
 
-        add_member(first_name, last_name, age, gender, weight, address, email, phone)   
+        database.database.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
 

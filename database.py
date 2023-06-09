@@ -69,6 +69,68 @@ class database:
 
             # Commit the changes and close the connection
             conn.commit()
+    
+    def get_all_trainers() -> Optional[list]:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM Trainers
+        """
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if result is None or len(result) == 0:
+            return None
+        else:
+            return result
+    def get_all_systemadmins() -> Optional[list]:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM SystemAdmins
+        """
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if result is None or len(result) == 0:
+            return None
+        else:
+            return result
+    def get_superadmin():
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM systemadmin
+            WHERE role = "super_admin"
+        """
+
+        cursor.execute(query)
+        result = cursor.fetchone()
+        if result is None:
+            return None
+        else:
+            return result
+    def add_admin(admin) -> None:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            INSERT INTO systemadmin (username, password_hash, first_name, last_name, registration_date, role)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (admin.username, admin.password, admin.firstName, admin.lastName, admin.registrationDate, admin.role))
+
+        # Commit the changes and close the connection
+        conn.commit()
+
+        
 
 
 
