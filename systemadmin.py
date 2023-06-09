@@ -64,7 +64,7 @@ class SystemAdmin(Trainer):
     if choice == "1":
       SystemAdmin.modify_trainer(trainer)
     elif choice == "2":
-      SystemAdmin.delete_trainer(trainer)
+      trainermodifier.delete_trainer(trainer)
     elif choice == "3":
       return
     else:

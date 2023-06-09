@@ -220,7 +220,6 @@ if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
-    SuperAdmin.view_trainer()
     ShowMenu()
 
     

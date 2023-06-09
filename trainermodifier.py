@@ -64,3 +64,14 @@ class trainermodifier:
         display.clearConsole()
         print("[+] Last name changed.")
         input("Press enter to continue...")
+    
+    def delete_trainer(trainer : Trainer):
+        display.clearConsole()
+        print(f"[!] You are about to delete the trainer {trainer.username}. This action cannot be undone.")
+        confirmation = input("[+] Are you sure you want to continue? (y/n):")
+        if confirmation.lower() != "y":
+            return
+        database.delete_trainer(trainer.username)
+        display.clearConsole()
+        print("[+] Trainer removed.")
+        input("Press enter to continue...")

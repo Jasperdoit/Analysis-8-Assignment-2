@@ -159,8 +159,10 @@ class Trainer:
             break
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
+    
     def to_tuple(self):
         return (self.username, self.password, self.firstName, self.lastName, self.registrationDate, self.role)
+    
     def from_tuple(tuple) -> 'Trainer':
         trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
         trainer.id = tuple[0]
