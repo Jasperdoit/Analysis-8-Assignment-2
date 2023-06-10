@@ -108,3 +108,6 @@ class SystemAdmin(Trainer):
     else:
       input("[!] Invalid choice.")
       return
+    
+  def delete_memberrecord() -> None:
+    database.delete_member()

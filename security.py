@@ -23,5 +23,3 @@ class security:
             return True
         except ValueError:
             return False
-    
-    

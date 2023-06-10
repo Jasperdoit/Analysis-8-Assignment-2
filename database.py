@@ -297,6 +297,82 @@ class database:
         # Commit the changes and close the connection
         conn.commit()
 
+    # def get_all_users():
+    #     conn = sqlite3.connect("fitplus.db")
+    #     cursor = conn.cursor()
+
+    #     # Query to retrieve all users from three tables
+    #     query = """
+    #         SELECT username FROM Trainers
+    #         UNION
+    #         SELECT username FROM systemadmin
+    #     """
+
+    #     cursor.execute(query)
+    #     result = cursor.fetchall()
+
+    #     # Close the connection
+    #     conn.close()
+
+    #     return result
+
+    def get_user_role(username):
+        if username == "super_admin":
+            return username
+
+
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to check the table name for a given username
+        query = """
+            SELECT 'trainer' AS table_name FROM Trainers WHERE username = ?
+            UNION
+            SELECT 'system_admin' AS table_name FROM systemadmin WHERE username = ?
+        """
+
+        cursor.execute(query, (username, username,))
+        result = cursor.fetchone()
+
+        # Close the connection
+        conn.close()
+
+        if result:
+            return result[0]  # Return the table name
+        else:
+            return None  # Username not found in any table
+
+    import sqlite3
+
+    def check_password(username, password):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Query to retrieve the password hash for the given username
+        query = """
+            SELECT password_hash FROM Trainers WHERE username = ?
+            UNION
+            SELECT password_hash FROM systemadmin WHERE username = ?
+        """
+        cursor.execute(query, (username, username,))
+        result = cursor.fetchone()
+
+        # Close the connection
+        conn.close()
+
+        if result is not None:
+            # Compare the stored password hash with the provided password
+            stored_password_hash = result[0]
+            if stored_password_hash == password:
+                return True
+
+        return False
+
+
+
+
+
+
 
 
 

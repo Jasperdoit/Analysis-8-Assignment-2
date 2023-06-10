@@ -6,7 +6,7 @@ from database import database as db
 from datetime import datetime
 from display import display
 from membermodifier import membermodifier
-from trainermodifier import trainermodifier
+#from trainermodifier import trainermodifier
 
 class Trainer:
     def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
