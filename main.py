@@ -31,20 +31,19 @@ def Login() -> None:
         showMenuOptions(menuOptions, Login)
             
     password = getpass.getpass("[+] Enter your password: ")
-    newpassword = passwordmanager.encrypt(password)
 
     display.clearConsole()
 
 
     if username != "super_admin":
-        if not security.is_valid_password(password) or db.check_password(username, newpassword) == False:
+        if security.is_valid_password(password) == False or db.check_password(username, password) == False:
             menuOptions = { "1": Login, "2": ShowMenu }
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
             print("[2] Go back.")
             showMenuOptions(menuOptions, Login)
     else:
-        if db.check_password(username, newpassword) == False:
+        if db.check_password(username, password) == False:
             menuOptions = { "1": Login, "2": ShowMenu }
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
@@ -94,7 +93,7 @@ def DisplayError(error):
     print(f"ERROR: {error}")
 
 def showTrainerMenu() -> None:
-    trainerOptions = { "1": Trainer.update_password, "2": Trainer.add_member, "3": Trainer.view_member, "4": Trainer.view_member, "5": Login }
+    trainerOptions = { "1": TrainerPass.update_password, "2": Trainer.add_member, "3": Trainer.view_member, "4": Trainer.view_member, "5": Login }
     print("[!] This is the trainer menu.")
     print("[+] Please Choose an option.")
     print("[1] Update password.")
@@ -153,5 +152,6 @@ if __name__ == "__main__":
         os.mkdir('./logs')
 
     database_setup.setup_database()
-    database_setup.setup_superadmin("super_admin", passwordmanager.encrypt("Admin_123!"))
+    database_setup.setup_superadmin("super_admin", "Admin_123!")
+    #database_setup.create_test_trainer()
     ShowMenu()

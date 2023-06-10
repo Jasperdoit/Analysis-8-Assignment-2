@@ -360,9 +360,7 @@ class database:
             return result[0]  # Return the table name
         else:
             return None  # Username not found in any table
-
-    import sqlite3
-
+        
     def check_password(username, password):
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()

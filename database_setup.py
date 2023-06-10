@@ -16,7 +16,7 @@ class database_setup:
                 password_hash TEXT NOT NULL,
                 first_name TEXT NULL,
                 last_name TEXT NULL,
-                registration_date TIMESTAMP NOT NULL,
+                registration_date TIMESTAMP NOT NULL
             )
         """)
 
@@ -27,7 +27,7 @@ class database_setup:
                 password_hash TEXT NOT NULL,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
-                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
@@ -47,17 +47,28 @@ class database_setup:
             )
         """)
 
-
-        
-        # cursor.execute("""
-        #     INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date ,role)
-        #     VALUES (?, ?, ?, ?, ?, ?)
-        # """, ("testtest1", "Password123!", "JOHN",
-        #     "DOE", datetime.now(),"role"))
-
-
         # Commit the changes and close the connection
         conn.commit()
+
+
+
+    def create_test_trainer():
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        password = "Test123456789!"
+
+        # Username doesn't exist, insert the test trainer into the Trainers table
+        hashed_password = passwordmanager.encrypt(password)
+        registration_date = datetime.now()
+
+        cursor.execute("""
+            INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
+            VALUES (?, ?, ?, ?, ?)
+        """, ("super_train", hashed_password, "John", "Doe", registration_date))
+        conn.commit()
+        conn.close()
+
 
     def setup_superadmin(username, password):
         newpass = passwordmanager.encrypt(password)
@@ -71,7 +82,7 @@ class database_setup:
         if result is None:
             cursor.execute("""
                 INSERT INTO systemadmin (username, password_hash, registration_date)
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?)
             """, (username, newpass, datetime.now()))
             conn.commit()
         conn.close()

@@ -6,7 +6,6 @@ from database import database as db
 from datetime import datetime
 from display import display
 from membermodifier import membermodifier
-from trainermodifier import trainermodifier
 # from trainermodifier import trainermodifier
 
 class Trainer:

@@ -10,7 +10,6 @@ from trainermodifier import trainermodifier
 class SystemAdmin(Trainer):
   def __init__(self, username, password, firstName, lastName, registrationDate = datetime.now()):
     super().__init__(username, password, firstName, lastName, registrationDate)
-    self.role = "systemadmin"
 
   def check_users():
     # List all trainers, systemadmins in the system and their role.
@@ -64,7 +63,6 @@ class SystemAdmin(Trainer):
     print(f"First name: {trainer.firstName}")
     print(f"Last name: {trainer.lastName}")
     print(f"Registration date: {trainer.registrationDate}")
-    print(f"Role: {trainer.role}")
     print("")
     print("[1] Modify trainer")
     print("[2] Delete trainer")

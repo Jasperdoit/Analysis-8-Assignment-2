@@ -11,7 +11,6 @@ class SuperAdmin(SystemAdmin):
 
   def __init__(self, username, password, firstName = "", lastName = "", registrationDate = datetime.datetime.now()):
     super().__init__(username, password, firstName, lastName, registrationDate)
-    self.role = "superadmin"
 
   def add_systemadmin() -> None:
     print("[!] Adding systemadmin.")
@@ -55,7 +54,6 @@ class SuperAdmin(SystemAdmin):
     print(f"First name: {admin.firstName}")
     print(f"Last name: {admin.lastName}")
     print(f"Registration date: {admin.registrationDate}")
-    print(f"Role: {admin.role}")
     print("")
     print("[1] Modify SystemAdmin")
     print("[2] Delete SystemAdmin")

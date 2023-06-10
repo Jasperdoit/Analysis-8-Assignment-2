@@ -7,7 +7,6 @@ class Member():
         self.firstName : str = firstName
         self.lastName : str = lastName
         self.registrationDate : datetime = registrationDate
-        self.role : str = "trainer"
 
 
 
