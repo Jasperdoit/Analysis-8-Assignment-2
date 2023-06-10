@@ -6,7 +6,8 @@ from database import database as db
 from datetime import datetime
 from display import display
 from membermodifier import membermodifier
-#from trainermodifier import trainermodifier
+from trainermodifier import trainermodifier
+# from trainermodifier import trainermodifier
 
 class Trainer:
     def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
@@ -15,7 +16,6 @@ class Trainer:
         self.firstName : str = firstName
         self.lastName : str = lastName
         self.registrationDate : datetime = registrationDate
-        self.role : str = "trainer"
 
     def set_first_name(self, firstName : str):
         self.firstName = firstName
@@ -58,11 +58,6 @@ class Trainer:
         phone = input("[+] Enter phone number:")
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)
-
-    def update_password() -> None:
-        trainer : Trainer = Trainer.from_tuple(trainer)
-        trainermodifier.modify_trainer_password(trainer)
-
 
     def modify_member() -> None:
         print("[!] Modifying member.")
@@ -131,3 +126,20 @@ class Trainer:
         trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
         trainer.id = tuple[0]
         return trainer
+    
+    
+class TrainerPass:
+    def update_password() -> None:
+        username = input("[!] Enter username")
+        password = input("[!] Enter current password")
+
+        trainer = db.get_trainer_by_username(username)
+
+        if trainer is None:
+            input("Trainer not found.")
+            return
+
+        trainer : Trainer = Trainer.from_tuple(trainer)
+
+        from trainermodifier import trainermodifier
+        trainermodifier.modify_trainer_password(trainer)

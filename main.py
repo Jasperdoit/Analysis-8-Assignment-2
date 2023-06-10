@@ -17,6 +17,7 @@ import sys
 from passwordmanager import passwordmanager
 from security import security
 import getpass
+from trainer import TrainerPass
 
 def Login() -> None:
     print("[!] Log in to Fitplus.")

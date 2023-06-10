@@ -111,3 +111,5 @@ class SystemAdmin(Trainer):
     
   def delete_memberrecord() -> None:
     database.delete_member()
+
+  

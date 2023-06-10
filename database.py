@@ -110,7 +110,7 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM systemadmin
-            WHERE role = "super_admin"
+            WHERE username = "super_admin"
         """
 
         cursor.execute(query)
@@ -126,9 +126,9 @@ class database:
         # Insert the member data into the Members table
         cursor.execute(
             """
-            INSERT INTO systemadmin (username, password_hash, first_name, last_name, registration_date, role)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (admin[0], admin[1], admin[2], admin[3], admin[4], admin[5]))
+            INSERT INTO systemadmin (username, password_hash, first_name, last_name, registration_date)
+            VALUES (?, ?, ?, ?, ?)
+        """, (admin[0], admin[1], admin[2], admin[3], admin[4]))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -176,6 +176,25 @@ class database:
             return True
         return False
     
+    def get_trainer_by_username(username : str)-> tuple:
+
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        query = """
+            SELECT * FROM Trainers WHERE username = ?
+        """
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result is None:
+            return None
+        else:
+            return result
+
+    
     def get_trainer_by_keyword(keyword : str) -> tuple:
         """returns a tuple of the trainer's data if found, None otherwise."""
         conn = sqlite3.connect("fitplus.db")
@@ -188,12 +207,11 @@ class database:
                 first_name LIKE ? OR
                 last_name LIKE ? OR
                 registration_date LIKE ? OR
-                role LIKE ?
         """
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -208,9 +226,9 @@ class database:
         # Insert the member data into the Members table
         cursor.execute(
             """
-            INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date, role)
+            INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], trainer[5]))
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4]))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -223,9 +241,9 @@ class database:
         # Insert the member data into the Members table
         cursor.execute(
             """
-            UPDATE Trainers SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?, role = ?
+            UPDATE Trainers SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?
             WHERE username = ?
-        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], trainer[5], username))
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], username))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -256,12 +274,11 @@ class database:
                 first_name LIKE ? OR
                 last_name LIKE ? OR
                 registration_date LIKE ? OR
-                role LIKE ?
         """
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -278,9 +295,9 @@ class database:
         # Insert the member data into the Members table
         cursor.execute(
             """
-            UPDATE systemadmin SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?, role = ?
+            UPDATE systemadmin SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?
             WHERE username = ?
-        """, (systemadmin[0], systemadmin[1], systemadmin[2], systemadmin[3], systemadmin[4], systemadmin[5], username))
+        """, (systemadmin[0], systemadmin[1], systemadmin[2], systemadmin[3], systemadmin[4], username))
 
         # Commit the changes and close the connection
         conn.commit()

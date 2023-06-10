@@ -17,7 +17,6 @@ class database_setup:
                 first_name TEXT NULL,
                 last_name TEXT NULL,
                 registration_date TIMESTAMP NOT NULL,
-                role TEXT NOT NULL
             )
         """)
 
@@ -29,7 +28,6 @@ class database_setup:
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
                 registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                role TEXT NOT NULL
             )
         """)
 
@@ -72,8 +70,8 @@ class database_setup:
 
         if result is None:
             cursor.execute("""
-                INSERT INTO systemadmin (username, password_hash, registration_date, role)
+                INSERT INTO systemadmin (username, password_hash, registration_date)
                 VALUES (?, ?, ?, ?)
-            """, (username, newpass, datetime.now(), "E"))
+            """, (username, newpass, datetime.now()))
             conn.commit()
         conn.close()

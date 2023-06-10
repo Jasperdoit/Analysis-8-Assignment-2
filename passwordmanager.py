@@ -14,3 +14,5 @@ class passwordmanager:
         for i in range(password_length):
             password += random.choice(allowed_characters)
         return password
+    
+    
