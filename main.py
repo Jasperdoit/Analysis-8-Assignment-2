@@ -30,13 +30,25 @@ def Login() -> None:
         showMenuOptions(menuOptions, Login)
             
     password = getpass.getpass("[+] Enter your password: ")
+    newpassword = passwordmanager.encrypt(password)
+
     display.clearConsole()
-    if not security.is_valid_password(password) or db.check_password(username, password) == False:
-        menuOptions = { "1": Login, "2": ShowMenu }
-        print("[!] Sorry this is not right please try again.")
-        print("[1] Try again.")
-        print("[2] Go back.")
-        showMenuOptions(menuOptions, Login)
+
+
+    if username != "super_admin":
+        if not security.is_valid_password(password) or db.check_password(username, newpassword) == False:
+            menuOptions = { "1": Login, "2": ShowMenu }
+            print("[!] Sorry this is not right please try again.")
+            print("[1] Try again.")
+            print("[2] Go back.")
+            showMenuOptions(menuOptions, Login)
+    else:
+        if db.check_password(username, newpassword) == False:
+            menuOptions = { "1": Login, "2": ShowMenu }
+            print("[!] Sorry this is not right please try again.")
+            print("[1] Try again.")
+            print("[2] Go back.")
+            showMenuOptions(menuOptions, Login)
 
     role = db.get_user_role(username)
 
@@ -108,7 +120,7 @@ def showSystemAdminMenu() -> None:
     print("[11] Delete member record.")
     print("[12] Search member.")
     print("[13] Logout.")
-    showMenuOptions(systemAdminOptions, showTrainerMenu)
+    showMenuOptions(systemAdminOptions, Login)
 
 def showSuperAdminMenu() -> None:
     superAdminOptions = { "1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer, "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.view_systemadmin, "8": SuperAdmin.view_systemadmin, "9": SuperAdmin.view_systemadmin, "12": SuperAdmin.add_member, "13": SystemAdmin.view_member, "14": SystemAdmin.delete_memberrecord, "15": SystemAdmin.view_member, "16": Login }
@@ -130,7 +142,7 @@ def showSuperAdminMenu() -> None:
     print("[14] Delete member record.")
     print("[15] Search member.")
     print("[16] Logout.")
-    showMenuOptions(superAdminOptions, showTrainerMenu)
+    showMenuOptions(superAdminOptions, Login)
 
 def Exit() -> None:
     sys.exit()

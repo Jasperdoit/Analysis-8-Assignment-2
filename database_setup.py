@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+from passwordmanager import passwordmanager
 
 class database_setup:
     def setup_database():
@@ -60,7 +61,8 @@ class database_setup:
         # Commit the changes and close the connection
         conn.commit()
 
-    def setup_superadmin(username, password) -> None:
+    def setup_superadmin(username, password):
+        newpass = passwordmanager.encrypt(password)
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -70,8 +72,8 @@ class database_setup:
 
         if result is None:
             cursor.execute("""
-                INSERT INTO systemadmin (username, password_hash, registration_date)
-                VALUES (?, ?, ?)
-            """, (username, password, datetime.now()))
+                INSERT INTO systemadmin (username, password_hash, registration_date, role)
+                VALUES (?, ?, ?, ?)
+            """, (username, newpass, datetime.now(), "E"))
             conn.commit()
         conn.close()
