@@ -6,6 +6,7 @@ from database import database as db
 from datetime import datetime
 from display import display
 from membermodifier import membermodifier
+import getpass
 # from trainermodifier import trainermodifier
 
 class Trainer:
@@ -28,42 +29,43 @@ class Trainer:
     
     def add_member() -> None:
         print("[!] Adding member.")
-        first_name = input("[+] Enter first name:")
-        last_name = input("[+] Enter last name:")
+        first_name = input("[+] Enter first name: ")
+        last_name = input("[+] Enter last name: ")
 
         while True:
-            age = input("[+] Enter age (number):")
+            age = int(input("[+] Enter age (number): "))
             if Trainer.is_valid_number(age) == False:
                 input("[!] Not a valid number")
             else:
                 break
         
         while True:
-            gender = input("[+] Enter gender:")
+            gender = input("[+] Enter gender (M/F/O): ")
             if Trainer.is_valid_gender(gender) == False:
-                input("[!] Not a gender. Enter 'M' or 'F'")
+                input("[!] Not a gender. Enter 'M' or 'F' or 'O'")
             else: 
                 break
 
         while True:
-            weight = input("[+] Enter weight (kg):")
+            weight = input("[+] Enter weight (kg): ")
             if Trainer.is_valid_number(weight) == False:
                 input("[!] Not a valid number")
             else:
                 break
 
-        address = input("[+] Enter address:")
-        email = input("[+] Enter email address:")
-        phone = input("[+] Enter phone number:")
+        address = input("[+] Enter address: ")
+        email = input("[+] Enter email address: ")
+        phone = input("[+] Enter phone number: ")
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)
 
     def modify_member() -> None:
         print("[!] Modifying member.")
-        print("[1] Modify firstnae")
+        print("[1] Modify firstname")
         print("[2] Modify lastname")
         print("[3] Modify phone")
         print("[4] Modify email")
+        print("[5] Modify address")
         print("[5] Go back")
 
         choice = input("Enter choice: ")
@@ -119,7 +121,7 @@ class Trainer:
             return
 
     def to_tuple(self):
-        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate, self.role)
+        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate)
     
     def from_tuple(tuple) -> 'Trainer':
         trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
@@ -129,8 +131,8 @@ class Trainer:
     
 class TrainerPass:
     def update_password() -> None:
-        username = input("[!] Enter username")
-        password = input("[!] Enter current password")
+        username = input("[!] Enter username: ")
+        password = getpass.getpass("[!] Enter current password: ")
 
         trainer = db.get_trainer_by_username(username)
 

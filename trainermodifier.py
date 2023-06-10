@@ -3,6 +3,7 @@ from security import security
 from database import database
 from passwordmanager import passwordmanager
 from display import display
+
 class trainermodifier:
     def update_trainer(trainer : Trainer, old_username : str) -> None:
         """Updates a trainer in the database. The trainer is identified by the old username, if this one is changed."""

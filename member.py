@@ -46,7 +46,7 @@ class Member():
 
 
     def to_tuple(self):
-        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate, self.role)
+        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate)
 
     def from_tuple(tuple) -> 'Member':
         Member = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
