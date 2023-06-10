@@ -27,31 +27,33 @@ class database:
         else:
             return member.Member(result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
         
-    def get_members(keyword : str) -> Optional[list]:
+    
+    def get_member_by_keyword(keyword : str) -> tuple:
+        """returns a tuple of the systemadmin's data if found, None otherwise."""
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
-    
+
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE id LIKE ? OR
+            WHERE username LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
                 address LIKE ? OR
                 email LIKE ? OR
-                phone LIKE ?
+                registration_date LIKE ?
         """
 
         keyword = f"%{keyword}%"
 
         cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword))
-        result = cursor.fetchall()
-        if result is None or len(result) == 0:
-            input("[!] No members found.")
+        result = cursor.fetchone()
+        if result is None:
+            return None
         else:
-            for i in range(len(result)):
-                print(result)
-            input("[!] Press 'Enter' to continue.")
+            return result
+
+
     def add_member(first_name, last_name, age, gender, weight,
                     address, email, phone):
             # Connect to the SQLite database
@@ -131,24 +133,19 @@ class database:
 
         
 
-    def delete_member():
-        print("[!] Deleting member.")
-        memberid = input("[+] Enter member ID:")
-
+    def delete_member(memberid : str):
         # Connect to the database
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
-        try:
-            # Execute the deletion query
-            cursor.execute("DELETE FROM Members WHERE member_id = ?", (memberid,))
-            conn.commit()
-            input("Member deleted successfully.")
-        except sqlite3.Error as e:
-            input(f"Error deleting member: {e}")
-        finally:
-            # Close the database connection
-            conn.close()
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            DELETE FROM members WHERE member_id = ?
+        """, (memberid,))
+
+        # Commit the changes and close the connection
+        conn.commit()
 
     def username_exists(username : str) -> bool:
         """returns True if the username exists, False otherwise."""

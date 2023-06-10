@@ -11,3 +11,17 @@ class security:
         # Regex pattern to validate password
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%&_\-=\\`|\(\){}\[\]:;\'<>,\.\?/])[a-zA-Z\d~!@#$%&_\-=\\`|\(\){}\[\]:;\'<>,\.\?/]{12,30}$"
         return re.match(pattern, password) is not None
+    
+    def is_valid_gender(gender):
+        # List of valid gender options
+        valid_genders = ['M', 'F', 'O']
+        return gender.upper() in valid_genders
+
+    def is_valid_number(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+    
+    
