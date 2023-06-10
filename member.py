@@ -1,4 +1,15 @@
+from datetime import datetime
+
 class Member():
+    def __init__(self, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
+        self.username : str = username
+        self.password : str = password
+        self.firstName : str = firstName
+        self.lastName : str = lastName
+        self.registrationDate : datetime = registrationDate
+
+
+
     # self.firstName = ""
     # self.lastName = ""
     # self.age = 0
@@ -32,6 +43,15 @@ class Member():
 
     def setPhone(phone: str) -> None:
         self.phone: str = phone
+
+
+    def to_tuple(self):
+        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate)
+
+    def from_tuple(tuple) -> 'Member':
+        Member = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
+        trainer.id = tuple[0]
+        return trainer
 
 
 class Address():
