@@ -13,8 +13,8 @@ class database_setup:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
-                first_name TEXT,
-                last_name TEXT,
+                first_name TEXT NULL,
+                last_name TEXT NULL,
                 registration_date TIMESTAMP NOT NULL,
                 role TEXT NOT NULL
             )
@@ -71,7 +71,7 @@ class database_setup:
         if result is None:
             cursor.execute("""
                 INSERT INTO systemadmin (username, password_hash, registration_date)
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (username, password, datetime.date, ))
+                VALUES (?, ?, ?)
+            """, (username, password, datetime.now()))
             conn.commit()
         conn.close()

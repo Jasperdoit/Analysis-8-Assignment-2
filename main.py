@@ -140,5 +140,5 @@ if __name__ == "__main__":
         os.mkdir('./logs')
 
     database_setup.setup_database()
-    database_setup.setup_superadmin(passwordmanager.encrypt("super_admin"), passwordmanager.encrypt("Admin_123!"))
+    database_setup.setup_superadmin("super_admin", passwordmanager.encrypt("Admin_123!"))
     ShowMenu()

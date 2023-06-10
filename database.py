@@ -1,5 +1,6 @@
 import member
 import sqlite3
+from passwordmanager import passwordmanager
 from typing import Optional
 
 class database:
@@ -101,6 +102,7 @@ class database:
             return None
         else:
             return result
+        
     def get_superadmin():
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
@@ -363,7 +365,7 @@ class database:
         if result is not None:
             # Compare the stored password hash with the provided password
             stored_password_hash = result[0]
-            if stored_password_hash == password:
+            if stored_password_hash == passwordmanager.encrypt(password):
                 return True
 
         return False
