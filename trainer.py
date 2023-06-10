@@ -3,13 +3,27 @@ import re
 import sqlite3
 import hashlib
 from database import database as db
+from datetime import datetime
 
 
 class Trainer:
 
-    def __init__(self, username, options):
-        self.username = username
-        self.options = options
+    def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
+        self.username : str = username
+        self.password : str = password
+        self.firstName : str = firstName
+        self.lastName : str = lastName
+        self.registrationDate : datetime = registrationDate
+        self.role : str = "trainer"
+
+    def set_first_name(self, firstName : str):
+        self.firstName = firstName
+
+    def set_last_name(self, lastName : str):
+        self.lastName = lastName
+
+    def set_registration_date(self, registrationDate : datetime):
+        self.registrationDate = registrationDate
 
         # Checks if the password is correct and uses allowed characters.
     def is_valid_password(password):
@@ -171,4 +185,12 @@ class Trainer:
         phone = input("[+] Enter phone number:")
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)   
+    
+    def to_tuple(self):
+        return (self.username, self.password, self.firstName, self.lastName, self.registrationDate, self.role)
+    
+    def from_tuple(tuple) -> 'Trainer':
+        trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
+        trainer.id = tuple[0]
+        return trainer
 

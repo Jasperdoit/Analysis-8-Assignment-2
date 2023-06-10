@@ -4,14 +4,15 @@ import sqlite3
 import hashlib
 import re
 import random
-import database as db
-
 from trainer import Trainer as tr
+from database import database as db
 from systemadmin import SystemAdmin
 from superadmin import SuperAdmin
 from string import ascii_letters, digits, punctuation
 from database_setup import setup_database
-
+import os
+import sys
+import passwordmanager
 
 def get_user_role(username):
     cursor.execute("SELECT role FROM systemadmin WHERE username = ?", (username,))
@@ -149,7 +150,7 @@ def showTrainerMenu():
   showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
-    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
+    systemAdminOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -167,24 +168,20 @@ def showSystemAdminMenu():
     showMenuOptions(systemAdminOptions, showTrainerMenu)
 
 def showSuperAdminMenu():
-    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "14": db.delete_member }
+    superAdminOptions = { "1": SuperAdmin.check_users, "2": SystemAdmin.add_trainer, "3": SystemAdmin.view_trainer, "4": SuperAdmin.add_systemadmin, "5": SuperAdmin.modify_systemadmin }
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
-    print("[2] Add trainers.")
-    print("[3] Modify trainers.")
-    print("[4] Delete trainers.")
-    print("[5] Reset trainer password.")
-    print("[6] Add admin.")
-    print("[7] Modify admin.")
-    print("[8] Delete admin.")
-    print("[9] Reset admin password.")
-    print("[10] Make backup.")
-    print("[11] See logs.")
-    print("[12] Add member.")
-    print("[13] Modify member.")
-    print("[14] Delete member record.")
-    print("[15] Search member.")
+    print("[2] Add trainer.")
+    print("[3] Modify trainer.")
+    print("[4] Add admin.")
+    print("[5] Modify admin.")
+    print("[6] Make backup.")
+    print("[7] See logs.")
+    print("[8] Add member.")
+    print("[9] Modify member.")
+    print("[10] Delete member record.")
+    print("[11] Search member.")
     showMenuOptions(superAdminOptions, showTrainerMenu)
 
 def add_test_trainer():
@@ -217,6 +214,7 @@ def add_test_member():
         conn.close()
 
 
+
 if __name__ == "__main__":
     if not os.path.exists('./logs'):
         os.mkdir('./logs')
@@ -224,8 +222,11 @@ if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
-    #add_test_trainer()
-    add_test_member()
+    SuperAdmin.view_systemadmin()
     ShowMenu()
+
+    
+    
+
 
 
