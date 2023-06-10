@@ -44,12 +44,7 @@ def setup_database():
             phone TEXT NOT NULL,
             registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-""")
-
+    """)
 
     # Commit the changes and close the connection
     conn.commit()
-    conn.close()
-
-# Call the setup_database function
-setup_database()

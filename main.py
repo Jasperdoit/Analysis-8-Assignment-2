@@ -52,47 +52,46 @@ def Login():
         DisplayError("Invalid user role.")
         
 def ShowMenu():
-  menuOptions = { "1": Login, "2": Exit }
-  display.clearConsole()
+    menuOptions = { "1": Login, "2": Exit }
+    display.clearConsole()
 
-  print("[!] Welcome to Fitplus!")
-  print("[+] Please Choose an option.")
-  print("[1] Log in")
-  print("[2] Exit")
-  showMenuOptions(menuOptions, ShowMenu)
+    print("[!] Welcome to Fitplus!")
+    print("[+] Please Choose an option.")
+    print("[1] Log in")
+    print("[2] Exit")
+    showMenuOptions(menuOptions, ShowMenu)
 
 
 def showMenuOptions(menuOptions, func):
-  try:
-    userInput = input("[?] Option: ")
-    assert 0 < int(userInput) <= len(menuOptions)
+    try:
+        userInput = input("[?] Option: ")
+        assert 0 < int(userInput) <= len(menuOptions)
+        display.clearConsole()
+        menuOptions[userInput]()
+    except Exception as e:
+        customError(func, e)
     display.clearConsole()
-    menuOptions[userInput]()
-  except Exception as e:
-    customError(func, e)
-  display.clearConsole()
-  
-  return func()
+    return func()
 
 def customError(func, e):
-  display.clearConsole()
-  print("[!] Invalid input, please try again.")
-  print('An exception occurred: {}'.format(e))
-  input("show error 1")
+    display.clearConsole()
+    print("[!] Invalid input, please try again.")
+    print('An exception occurred: {}'.format(e))
+    input("show error 1")
 
 def DisplayError(error):
     print(f"ERROR: {error}")
 
 def showTrainerMenu():
-  trainerOptions = { "1": Trainer.update_password, "2": Trainer.add_member, "3": Trainer.view_member, "4": Trainer.view_member, "5": Login }
-  print("[!] This is the trainer menu.")
-  print("[+] Please Choose an option.")
-  print("[1] Update password.")
-  print("[2] Add member.")
-  print("[3] Modify member.")
-  print("[4] Search member.")
-  print("[5] Logout.")
-  showMenuOptions(trainerOptions, showTrainerMenu)
+    trainerOptions = { "1": Trainer.update_password, "2": Trainer.add_member, "3": Trainer.view_member, "4": Trainer.view_member, "5": Login }
+    print("[!] This is the trainer menu.")
+    print("[+] Please Choose an option.")
+    print("[1] Update password.")
+    print("[2] Add member.")
+    print("[3] Modify member.")
+    print("[4] Search member.")
+    print("[5] Logout.")
+    showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
     systemAdminOptions = { "1": SystemAdmin.update_password, "2": SystemAdmin.check_users, "3": SystemAdmin.add_trainer, "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer, "9": SystemAdmin.add_member, "10": SystemAdmin.view_member, "12": SystemAdmin.view_member}
