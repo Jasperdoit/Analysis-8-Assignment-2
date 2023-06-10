@@ -6,6 +6,7 @@ import re
 import random
 import database as db
 
+from backup import Backup
 from trainer import Trainer as tr
 from systemadmin import SystemAdmin
 from superadmin import SuperAdmin
@@ -220,12 +221,16 @@ def add_test_member():
 if __name__ == "__main__":
     if not os.path.exists('./logs'):
         os.mkdir('./logs')
+    if not os.path.exists('./backup'):
+        os.mkdir('./backup')
 
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
     #add_test_trainer()
     add_test_member()
+    # Backup.create_backup()
+    # Backup.restore_backup()
     ShowMenu()
 
 

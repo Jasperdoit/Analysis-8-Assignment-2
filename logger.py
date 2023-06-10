@@ -1,5 +1,4 @@
 # from database import Database
-import logging
 import base64
 import os
 from datetime import datetime
@@ -7,7 +6,6 @@ from datetime import datetime
 
 class Logger:
     def __init__(self):
-        # self.key = "dhg74n3fg2"
         self.key = "g"
         self.delimiter = ","
 
@@ -28,22 +26,24 @@ class Logger:
             decrypted_message += decrypted_char
         return decrypted_message
 
+    @staticmethod
     def write_to_log(self, lst: list[str]):
-        fileToCheck = os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log')
+        file_to_check = os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log')
         encrypted_log = self._encrypt_message(lst)
         encoded_log = base64.b64encode(encrypted_log.encode())
-        if os.path.exists(fileToCheck):
-            with open(fileToCheck, 'ab') as file:
+        if os.path.exists(file_to_check):
+            with open(file_to_check, 'ab') as file:
                 file.write(encoded_log + b'\n')
 
         else:
-            with open(fileToCheck, 'wb') as file:
+            with open(file_to_check, 'wb') as file:
                 file.write(encoded_log + b'\n')
 
+    @staticmethod
     def read_from_log(self):
         t = Table()
         data = list[list]()
-        with open(os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log'), 'rb') as file:
+        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'rb') as file:
             encoded_lines = file.readlines()
             for line in encoded_lines:
                 decoded_log = base64.b64decode(line)
@@ -77,11 +77,14 @@ class LogMessage:
         self.suspicious = suspicious
 
     def create_log(self) -> list[str]:
-        return f'{self.no},{self.date},{self.time},{self.username},{self.activity},{self.info},{self.suspicious}'.split(',')
+        return f'{self.no},{self.date},{self.time},{self.username},{self.activity},{self.info},{self.suspicious}'.split(
+            ',')
+
 
 class Table:
     def __init__(self, border=' | ', bot_char='-'):
-        self.headers = ["No.", "Date", "Time", "Username", "Description of activity", "Additional Information", "Suspicious"]
+        self.headers = ["No.", "Date", "Time", "Username", "Description of activity", "Additional Information",
+                        "Suspicious"]
         self.columns = len(self.headers)
         self.border = border
         self.bot_char = bot_char
@@ -117,9 +120,10 @@ class Table:
 
         print(border_row)
 
+
 def get_log_length() -> int:
     try:
-        with open(os.path.abspath(f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
+        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
             return len(file.readlines()) + 1
     except:
         return 1
