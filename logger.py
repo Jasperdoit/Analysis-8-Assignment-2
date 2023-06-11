@@ -1,8 +1,3 @@
-from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
 from encryption import Encryption
 from datetime import datetime
 
@@ -19,18 +14,18 @@ class Logger:
         lst_to_string = ','.join(lst)
         encrypted_log = Encryption().encrypt(lst_to_string)
         if os.path.exists(file_to_check):
-            with open(file_to_check, 'a') as file:
-                file.write(encrypted_log + '\n')
+            with open(file_to_check, 'ab') as file:
+                file.write(encrypted_log + b'\n')
 
         else:
-            with open(file_to_check, 'w') as file:
-                file.write(encrypted_log + '\n')
+            with open(file_to_check, 'wb') as file:
+                file.write(encrypted_log + b'\n')
 
     @staticmethod
     def show_log():
         t = Table()
         data = list[list]()
-        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
+        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'rb') as file:
             encoded_lines = file.readlines()
             for line in encoded_lines:
                 decrypted_log = Encryption().decrypt(line)

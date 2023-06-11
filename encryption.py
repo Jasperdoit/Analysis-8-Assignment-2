@@ -1,3 +1,4 @@
+import base64
 import os
 import hashlib
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -79,7 +80,7 @@ class Encryption:
         with open('public.pem', 'wb') as f:
             f.write(public_pem)
     
-    def encrypt(self, message : str):
+    def encrypt(self, message: str):
         message_bytes = message.encode()
         encrypted = Encryption.public_key.encrypt(
             message_bytes,
@@ -89,9 +90,10 @@ class Encryption:
                 label=None
             )
         )
-        return encrypted
+        return base64.b64encode(encrypted)
     
-    def decrypt(self, message : str):
+    def decrypt(self, message: str):
+        message = base64.b64decode(message)
         decrypted = Encryption.private_key.decrypt(
             message,
             padding.OAEP(

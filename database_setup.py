@@ -73,9 +73,9 @@ class database_setup:
             conn.commit()
         conn.close()
 
-        LogMessage()\
-            .set_username(username)\
-            .set_activity("New admin user is created.")\
-            .set_info(f"Created with username: {username}")\
-            .set_not_suspicious()\
-            .create_log()
+        # LogMessage()\
+        #     .set_username(username)\
+        #     .set_activity("New admin user is created.")\
+        #     .set_info(f"Created with username: {username}")\
+        #     .set_not_suspicious()\
+        #     .create_log()
