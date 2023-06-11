@@ -56,25 +56,6 @@ class database_setup:
         conn.commit()
 
 
-
-    def create_test_trainer():
-        conn = sqlite3.connect("fitplus.db")
-        cursor = conn.cursor()
-
-        password = "Test123456789!"
-
-        # Username doesn't exist, insert the test trainer into the Trainers table
-        hashed_password = passwordmanager.encrypt(password)
-        registration_date = datetime.now()
-
-        cursor.execute("""
-            INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
-            VALUES (?, ?, ?, ?, ?)
-        """, ("super_train1", hashed_password, "John", "Doe", registration_date))
-        conn.commit()
-        conn.close()
-
-
     def setup_superadmin(username, password):
         newpass = passwordmanager.encrypt(password)
         conn = sqlite3.connect("fitplus.db")
