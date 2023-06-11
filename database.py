@@ -21,7 +21,7 @@ class database:
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword,))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -48,7 +48,7 @@ class database:
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword,))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -57,7 +57,7 @@ class database:
 
 
     def add_member(memberid, first_name, last_name, age, gender, weight,
-                    streetname, zipcode, housenumber, city, email, phone):
+                    streetname, zipcode, housenumber, city, email, phone,):
             # Connect to the SQLite database
             conn = sqlite3.connect("fitplus.db")
             cursor = conn.cursor()
@@ -68,7 +68,7 @@ class database:
                 INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city, email, phone)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city,
-                email, phone))
+                email, phone,))
 
             # Commit the changes and close the connection
             conn.commit()
@@ -143,7 +143,7 @@ class database:
             """
             INSERT INTO systemadmin (username, password_hash, first_name, last_name, registration_date)
             VALUES (?, ?, ?, ?, ?)
-        """, (admin[0], admin[1], admin[2], admin[3], admin[4]))
+        """, (admin[0], admin[1], admin[2], admin[3], admin[4],))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -275,7 +275,7 @@ class database:
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword,))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -292,7 +292,7 @@ class database:
             """
             INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4]))
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4],))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -307,7 +307,7 @@ class database:
             """
             UPDATE Trainers SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?
             WHERE username = ?
-        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], username))
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4], username,))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -342,7 +342,7 @@ class database:
 
         keyword = f"%{keyword}%"
 
-        cursor.execute(query, (keyword, keyword, keyword, keyword))
+        cursor.execute(query, (keyword, keyword, keyword, keyword,))
         result = cursor.fetchone()
         if result is None:
             return None
@@ -361,7 +361,7 @@ class database:
             """
             UPDATE systemadmin SET username = ?, password_hash = ?, first_name = ?, last_name = ?, registration_date = ?
             WHERE username = ?
-        """, (systemadmin[0], systemadmin[1], systemadmin[2], systemadmin[3], systemadmin[4], username))
+        """, (systemadmin[0], systemadmin[1], systemadmin[2], systemadmin[3], systemadmin[4], username,))
 
         # Commit the changes and close the connection
         conn.commit()
