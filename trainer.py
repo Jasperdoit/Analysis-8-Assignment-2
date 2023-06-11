@@ -36,10 +36,10 @@ class Trainer:
         weight = security.get_valid_input("[+] Enter weight (kg): ", security.is_valid_number)
         street = security.get_valid_input("[+] Enter street name: ", lambda value: value.strip() != "")
         housenumber = security.get_valid_input("[+] Enter housenumber: ", security.is_valid_number)
-        zipcode = security.get_valid_input("[+] Enter zipcode (DDDDXX): ", lambda value: value.strip() != "")
+        zipcode = security.get_valid_input("[+] Enter zipcode (DDDDXX): ", security.is_valid_zipcode)
         city = security.choose_city()
         email = security.get_valid_input("[+] Enter email address: ", security.is_valid_email)
-        phone = security.get_valid_input("[+] Enter phone number: ", security.is_valid_phone_number)
+        phone = security.get_valid_input("[+] Enter phone number (DDDDDDDD): ", security.is_valid_phone_number)
 
         db.add_member(memberid, first_name, last_name, age, gender, weight, street, housenumber, zipcode, city, email, phone)
         input("Added member succesfully.")
@@ -75,7 +75,7 @@ class Trainer:
         elif choice == "6":
             Trainer.membermodifier("[!] Enter new housenumber: ", "house_number", security.is_valid_number, member)
         elif choice == "7":
-            Trainer.membermodifier("[!] Enter new zipcode (DDDDXX): ", "zipcode", lambda value: value.strip() != "", member)
+            Trainer.membermodifier("[!] Enter new zipcode (DDDDXX): ", "zipcode", security.is_valid_zipcode, member)
         elif choice == "8":
             city = security.choose_city()
             db.update_city(city, member)
