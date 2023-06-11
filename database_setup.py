@@ -40,7 +40,10 @@ class database_setup:
                 age INTEGER NOT NULL,
                 gender TEXT NOT NULL,
                 weight REAL NOT NULL,
-                address TEXT NOT NULL,
+                street TEXT NOT NULL,
+                housenumber INTEGER NOT NULL,
+                zipcode TEXT NOT NULL,
+                city TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -65,7 +68,7 @@ class database_setup:
         cursor.execute("""
             INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
             VALUES (?, ?, ?, ?, ?)
-        """, ("super_train", hashed_password, "John", "Doe", registration_date))
+        """, ("super_train1", hashed_password, "John", "Doe", registration_date))
         conn.commit()
         conn.close()
 

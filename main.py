@@ -156,5 +156,5 @@ if __name__ == "__main__":
 
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
-    #database_setup.create_test_trainer()
+    database_setup.create_test_trainer()
     ShowMenu()
