@@ -125,6 +125,24 @@ class LogMessages(LogMessage):
             .set_not_suspicious() \
             .create_log()
 
+    @staticmethod
+    def log_user_created_backup(username: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("Created Backup") \
+            .set_info(f"username: {username}") \
+            .set_not_suspicious() \
+            .create_log()
+
+    @staticmethod
+    def log_user_restored_backup(username: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("Restored Backup") \
+            .set_info(f"username: {username}") \
+            .set_not_suspicious() \
+            .create_log()
+
 
 class Table:
     def __init__(self, border=' | ', bot_char='-'):
