@@ -42,6 +42,7 @@ class Backup:
             return print(e)
         shutil.move('./temp.zip', './backup')
         os.rename('./backup/temp.zip', Backup.get_path(count))
+        input("[!] Backup created.")
 
     @staticmethod
     def get_latest_backup() -> str:
@@ -63,3 +64,4 @@ class Backup:
         Backup.create_backup()
         with zipfile.ZipFile(latest_backup, 'r', zipfile.ZIP_DEFLATED) as zip_object:
             zipfile.ZipFile.extractall(zip_object, '.')
+        input("[!] Backup restored.")
