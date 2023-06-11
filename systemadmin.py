@@ -5,6 +5,7 @@ from database import database
 from passwordmanager import passwordmanager
 from display import display
 from trainermodifier import trainermodifier
+import getpass
 
 
 class SystemAdmin(Trainer):
@@ -13,8 +14,8 @@ class SystemAdmin(Trainer):
 
   def check_users():
     # List all trainers, systemadmins in the system and their role.
-    trainers : list[Trainer] = database.database.get_all_trainers() or list()
-    systemadmins : list[SystemAdmin] = database.database.get_all_systemadmins() or list()
+    trainers : list[Trainer] = database.get_all_trainers() or list()
+    systemadmins : list[SystemAdmin] = database.get_all_systemadmins() or list()
     for trainer in trainers:
       print(f"Trainer: {trainer[1]} - {trainer[3]}")
     for systemadmin in systemadmins:
@@ -109,5 +110,24 @@ class SystemAdmin(Trainer):
     
   def delete_memberrecord() -> None:
     database.delete_member()
+
+
+class AdminPass:
+    def update_password() -> None:
+        username = input("[!] Enter username: ")
+        password = getpass.getpass("[!] Enter current password: ")
+
+        if database.check_password(username, password) == False:
+            input("Wrong credentials.")
+            return
+
+        admin = database.get_admin_by_username(username)
+
+        if admin is None:
+            input("Trainer not found.")
+            return
+
+        from adminmodifier import adminmodifier
+        adminmodifier.modify_systemadmin_password(admin)
 
   

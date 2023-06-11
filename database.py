@@ -4,19 +4,19 @@ from passwordmanager import passwordmanager
 from typing import Optional
 
 class database:
-    def get_member(keyword : str) -> Optional[member.Member]:
+    def print_member(keyword : str):
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE id LIKE ? OR
+            WHERE member_id LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                address LIKE ? OR
-                email LIKE ? OR
-                phone LIKE ?
+                zipcode LIKE ? OR
+                streetname LIKE ? OR
+                email LIKE ?
         """
 
         keyword = f"%{keyword}%"
@@ -26,7 +26,8 @@ class database:
         if result is None:
             return None
         else:
-            return member.Member(result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
+            print(result)
+            return
         
     
     def get_member_by_keyword(keyword : str) -> tuple:
@@ -37,12 +38,12 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE username LIKE ? OR
+            WHERE member_id LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                address LIKE ? OR
-                email LIKE ? OR
-                registration_date LIKE ?
+                zipcode LIKE ? OR
+                streetname LIKE ? OR
+                email LIKE ?
         """
 
         keyword = f"%{keyword}%"
@@ -55,8 +56,8 @@ class database:
             return result
 
 
-    def add_member(first_name, last_name, age, gender, weight,
-                    address, email, phone):
+    def add_member(memberid, first_name, last_name, age, gender, weight,
+                    streetname, zipcode, housenumber, city, email, phone):
             # Connect to the SQLite database
             conn = sqlite3.connect("fitplus.db")
             cursor = conn.cursor()
@@ -64,13 +65,27 @@ class database:
             # Insert the member data into the Members table
             cursor.execute(
                 """
-                INSERT INTO Members (first_name, last_name, age, gender, weight, address, email, phone)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (first_name, last_name, age, gender, weight, address,
+                INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city, email, phone)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city,
                 email, phone))
 
             # Commit the changes and close the connection
             conn.commit()
+
+    def delete_member(memberid):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Delete the member based on the entire row data
+        cursor.execute("""
+            DELETE FROM Members
+            WHERE member_id = ?
+        """, (memberid,))
+
+        # Commit the changes and close the connection
+        conn.commit()
+        conn.close()
     
     def get_all_trainers() -> Optional[list]:
         conn = sqlite3.connect("fitplus.db")
@@ -135,7 +150,7 @@ class database:
 
         
 
-    def delete_member(memberid : str):
+    def delete_member(memberid : str) -> None:
         # Connect to the database
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
@@ -148,6 +163,22 @@ class database:
 
         # Commit the changes and close the connection
         conn.commit()
+
+    def update_member(value, argument, member)-> None:
+        # Connect to the database
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            UPDATE members SET {} = ? WHERE member_id = ?
+            """.format(argument), (value, member[1],))
+
+
+        # Commit the changes and close the connection
+        conn.commit()
+
 
     def username_exists(username : str) -> bool:
         """returns True if the username exists, False otherwise."""
@@ -183,6 +214,25 @@ class database:
 
         query = """
             SELECT * FROM Trainers WHERE username = ?
+        """
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result is None:
+            return None
+        else:
+            return result
+        
+
+    def get_admin_by_username(username : str)-> tuple:
+
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        query = """
+            SELECT * FROM systemadmin WHERE username = ?
         """
         cursor.execute(query, (username,))
         result = cursor.fetchone()

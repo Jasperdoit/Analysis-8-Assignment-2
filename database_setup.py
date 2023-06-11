@@ -42,7 +42,7 @@ class database_setup:
                 age INTEGER NOT NULL,
                 gender TEXT NOT NULL,
                 weight REAL NOT NULL,
-                street TEXT NOT NULL,
+                streetname TEXT NOT NULL,
                 housenumber INTEGER NOT NULL,
                 zipcode TEXT NOT NULL,
                 city TEXT NOT NULL,

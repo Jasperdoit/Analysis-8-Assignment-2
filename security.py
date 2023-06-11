@@ -1,4 +1,7 @@
 import re
+import random
+from datetime import datetime
+
 class security:
     def is_valid_username(username):
         """Validates the username for the following criteria:
@@ -59,3 +62,21 @@ class security:
                 if 1 <= choice <= len(cities):
                     return cities[choice - 1]
             print("Invalid input. Please choose a valid number.")
+
+    def make_memberid():
+        # Get the last two digits of the current year
+        current_year = datetime.now().year % 100
+
+        # Generate the first 7 digits randomly
+        digits = [random.randint(0, 9) for _ in range(7)]
+
+        # Append the year digits and calculate the checksum digit
+        digits.extend([current_year // 10, current_year % 10])
+        checksum = sum(digits) % 10
+        digits.append(checksum)
+
+        # Convert the digits to a string
+        member_id = ''.join(str(digit) for digit in digits)
+
+        return member_id
+
