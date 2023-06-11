@@ -10,7 +10,7 @@ class Logger:
         self.delimiter = ","
 
     def _encrypt_message(self, lst: list[str]) -> str:
-        # Simple XOR encryption
+        # XOR encryption
         encrypted_message = ""
         message = self.delimiter.join(lst)
         for char in message:
@@ -19,7 +19,7 @@ class Logger:
         return encrypted_message
 
     def _decrypt_message(self, encrypted_message: str) -> str:
-        # Simple XOR decryption
+        # XOR decryption
         decrypted_message = ""
         for char in encrypted_message:
             decrypted_char = chr(ord(char) ^ ord(self.key))
@@ -56,7 +56,7 @@ class Logger:
 
 class LogMessage:
     def __init__(self):
-        self.no = get_log_length()
+        self.no = LogMessage.get_log_length()
         self.date = datetime.now().strftime("%Y-%m-%d")
         self.time = datetime.now().strftime("%H:%M:%S")
         self.username = str
@@ -79,6 +79,14 @@ class LogMessage:
     def create_log(self) -> list[str]:
         return f'{self.no},{self.date},{self.time},{self.username},{self.activity},{self.info},{self.suspicious}'.split(
             ',')
+
+    @staticmethod
+    def get_log_length() -> int:
+        try:
+            with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
+                return len(file.readlines()) + 1
+        except:
+            return 1
 
 
 class Table:
@@ -121,9 +129,3 @@ class Table:
         print(border_row)
 
 
-def get_log_length() -> int:
-    try:
-        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
-            return len(file.readlines()) + 1
-    except:
-        return 1

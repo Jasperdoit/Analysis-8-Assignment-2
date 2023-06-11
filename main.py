@@ -23,16 +23,18 @@ def get_user_role(username):
         return None
 
     # Checks if the password is correct and uses allowed characters.
+
+
 def is_valid_password(password):
     # Regex pattern to validate password
     pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,30}$'
     return re.match(pattern, password) is not None
 
+
 # Hashes the password of the user.
 def hash_password(password):
     password_hash = hashlib.sha256(password.encode()).hexdigest()
     return password_hash
-
 
 
 # Checks for valid username.
@@ -42,7 +44,6 @@ def is_valid_username(username):
     return re.match(pattern, username) is not None
 
 
-
 def username_exists(username):
     cursor.execute("SELECT COUNT(*) FROM systemadmin WHERE username = ?", (username,))
     count = cursor.fetchone()[0]
@@ -50,32 +51,30 @@ def username_exists(username):
 
 
 def clearConsole():
-     os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def Login():
     print("[!] Log in to Fitplus.")
     username = input("[+] Enter your username: ")
     clearConsole()
     if not validate_username(username):
-        menuOptions = { "1": Login, "2": ShowMenu }
+        menuOptions = {"1": Login, "2": ShowMenu}
         print("[!] Sorry this is not right please try again.")
         print("[1] Try again.")
         print("[2] Go back.")
         showMenuOptions(menuOptions, Login)
-            
 
     password = input("[+] Enter your password: ")
     clearConsole()
     if not validate_password(password, username):
-        menuOptions = { "1": Login, "2": ShowMenu }
+        menuOptions = {"1": Login, "2": ShowMenu}
         print("[!] Sorry this is not right please try again.")
         print("[1] Try again.")
         print("[2] Go back.")
         showMenuOptions(menuOptions, Login)
 
-
     role = get_user_role(username)
-    
 
     # Proceed with the appropriate actions based on the user's role
     if role == "trainer":
@@ -87,6 +86,7 @@ def Login():
     else:
         DisplayError("Invalid user role.")
 
+
 def validate_username(username):
     if not is_valid_username(username):
         return False
@@ -94,7 +94,6 @@ def validate_username(username):
         return False
     return True
 
-        
 
 def validate_password(password, username):
     cursor.execute("SELECT password_hash FROM systemadmin WHERE username = ?", (username,))
@@ -102,55 +101,62 @@ def validate_password(password, username):
     if hash_password(password) == result:
         return False
     return True
-        
+
+
 def DisplayError(error):
     print(f"ERROR: {error}")
 
-def ShowMenu():
-  menuOptions = { "1": Login, "2": Exit }
-  clearConsole()
 
-  print("[!] Welcome to Fitplus!")
-  print("[+] Please Choose an option.")
-  print("[1] Log in")
-  print("[2] Exit")
-  showMenuOptions(menuOptions, ShowMenu)
+def ShowMenu():
+    menuOptions = {"1": Login, "2": Exit}
+    clearConsole()
+
+    print("[!] Welcome to Fitplus!")
+    print("[+] Please Choose an option.")
+    print("[1] Log in")
+    print("[2] Exit")
+    showMenuOptions(menuOptions, ShowMenu)
 
 
 def showMenuOptions(menuOptions, func):
-  try:
-    userInput = input("[?] Option: ")
-    assert 0 < int(userInput) <= len(menuOptions)
+    try:
+        userInput = input("[?] Option: ")
+        assert 0 < int(userInput) <= len(menuOptions)
+        clearConsole()
+        menuOptions[userInput]()
+    except Exception as e:
+        customError(func, e)
     clearConsole()
-    menuOptions[userInput]()
-  except Exception as e:
-    customError(func, e)
-  clearConsole()
-  
-  return func()
+
+    return func()
+
 
 def customError(func, e):
-  clearConsole()
-  print("[!] Invalid input, please try again.")
-  print('An exception occurred: {}'.format(e))
-  input("show error 1")
+    clearConsole()
+    print("[!] Invalid input, please try again.")
+    print('An exception occurred: {}'.format(e))
+    input("show error 1")
+
 
 def Exit():
     sys.exit()
 
+
 def showTrainerMenu():
-  trainerOptions = { "1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member, "5": Login }
-  print("[!] This is the trainer menu.")
-  print("[+] Please Choose an option.")
-  print("[1] Update password.")
-  print("[2] Add member.")
-  print("[3] Modify member.")
-  print("[4] Search member.")
-  print("[5] Back.")
-  showMenuOptions(trainerOptions, showTrainerMenu)
+    trainerOptions = {"1": tr.update_password, "2": tr.adding_member, "3": tr.modify_member, "4": tr.search_member,
+                      "5": Login}
+    print("[!] This is the trainer menu.")
+    print("[+] Please Choose an option.")
+    print("[1] Update password.")
+    print("[2] Add member.")
+    print("[3] Modify member.")
+    print("[4] Search member.")
+    print("[5] Back.")
+    showMenuOptions(trainerOptions, showTrainerMenu)
 
 def showSystemAdminMenu():
-    systemAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "11" : db.delete_member }
+    systemAdminOptions = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
+                          "5": Login, "7": Backup.create_backup, "8": Backup.restore_backup(), "12": db.delete_member}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -160,15 +166,17 @@ def showSystemAdminMenu():
     print("[5] Delete trainers.")
     print("[6] Reset trainer password.")
     print("[7] Make backup.")
-    print("[8] See logs.")
-    print("[9] Add member.")
-    print("[10] Modify members.")
-    print("[11] Delete member record.")
-    print("[12] Search member.")
+    print("[8] Restore backup.")
+    print("[9] See logs.")
+    print("[10] Add member.")
+    print("[11] Modify members.")
+    print("[12] Delete member record.")
+    print("[13] Search member.")
     showMenuOptions(systemAdminOptions, showTrainerMenu)
 
 def showSuperAdminMenu():
-    superAdminOptions = { "1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member, "5": Login, "14": db.delete_member }
+    superAdminOptions = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
+                         "5": Login, "10": Backup.create_backup, "11": Backup.restore_backup(), "15": db.delete_member}
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -181,12 +189,14 @@ def showSuperAdminMenu():
     print("[8] Delete admin.")
     print("[9] Reset admin password.")
     print("[10] Make backup.")
-    print("[11] See logs.")
-    print("[12] Add member.")
-    print("[13] Modify member.")
-    print("[14] Delete member record.")
-    print("[15] Search member.")
+    print("[11] Restore backup.")
+    print("[12] See logs.")
+    print("[13] Add member.")
+    print("[14] Modify member.")
+    print("[15] Delete member record.")
+    print("[16] Search member.")
     showMenuOptions(superAdminOptions, showTrainerMenu)
+
 
 def add_test_trainer():
     username = "testtest1"
@@ -194,9 +204,11 @@ def add_test_trainer():
     password_hash = hash_password(password)
     role = "trainer"
 
-    cursor.execute("INSERT INTO systemadmin (username, password_hash, role) VALUES (?, ?, ?)", (username, password_hash, role))
+    cursor.execute("INSERT INTO systemadmin (username, password_hash, role) VALUES (?, ?, ?)",
+                   (username, password_hash, role))
     conn.commit()
     print("Test trainer added successfully.")
+
 
 def add_test_member():
     # Connect to the database
@@ -227,10 +239,8 @@ if __name__ == "__main__":
     conn = sqlite3.connect("fitplus.db")
     cursor = conn.cursor()
     setup_database()
-    #add_test_trainer()
+    # add_test_trainer()
     add_test_member()
     # Backup.create_backup()
     # Backup.restore_backup()
     ShowMenu()
-
-

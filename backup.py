@@ -8,6 +8,7 @@ DATABASE_NAME = 'fitplus.db'
 ZIP_TEMP_NAME = 'temp.zip'
 LOGS_FOLDER_NAME ='./logs'
 
+
 class Backup:
 
     @staticmethod
@@ -35,7 +36,7 @@ class Backup:
             count += 1
         try:
             with zipfile.ZipFile(ZIP_TEMP_NAME, 'w', zipfile.ZIP_DEFLATED) as zip_object:
-                Backup.zip_dir('./logs', zip_object)
+                Backup.zip_dir(zip_object)
                 zip_object.write(DATABASE_NAME)
         except Exception as e:
             return print(e)
