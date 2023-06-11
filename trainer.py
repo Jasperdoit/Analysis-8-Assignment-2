@@ -7,6 +7,7 @@ from datetime import datetime
 from display import display
 from membermodifier import membermodifier
 import getpass
+from security import security
 # from trainermodifier import trainermodifier
 
 class Trainer:
@@ -29,35 +30,22 @@ class Trainer:
     
     def add_member() -> None:
         print("[!] Adding member.")
-        first_name = input("[+] Enter first name: ")
-        last_name = input("[+] Enter last name: ")
 
-        while True:
-            age = int(input("[+] Enter age (number): "))
-            if Trainer.is_valid_number(age) == False:
-                input("[!] Not a valid number")
-            else:
-                break
-        
-        while True:
-            gender = input("[+] Enter gender (M/F/O): ")
-            if Trainer.is_valid_gender(gender) == False:
-                input("[!] Not a gender. Enter 'M' or 'F' or 'O'")
-            else: 
-                break
-
-        while True:
-            weight = input("[+] Enter weight (kg): ")
-            if Trainer.is_valid_number(weight) == False:
-                input("[!] Not a valid number")
-            else:
-                break
-
-        address = input("[+] Enter address: ")
-        email = input("[+] Enter email address: ")
-        phone = input("[+] Enter phone number: ")
+        first_name = security.get_valid_input("[+] Enter first name: ", lambda value: value.strip() != "")
+        last_name = security.get_valid_input("[+] Enter last name: ", lambda value: value.strip() != "")
+        age = security.get_valid_input("[+] Enter age (number): ", security.is_valid_number)
+        gender = security.get_valid_input("[+] Enter gender (M/F/O): ", security.is_valid_gender)
+        weight = security.get_valid_input("[+] Enter weight (kg): ", security.is_valid_number)
+        street = security.get_valid_input("[+] Enter street name: ", lambda value: value.strip() != "")
+        housenumber = security.get_valid_input("[+] Enter housenumber: ", security.is_valid_number)
+        zipcode = security.get_valid_input("[+] Enter zipcode (DDDDXX): ", lambda value: value.strip() != "")
+        city = security.choose_city()
+        email = security.get_valid_input("[+] Enter email address: ", security.is_valid_email)
+        phone = security.get_valid_input("[+] Enter phone number: ", security.is_valid_phone_number)
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)
+        input("Added member succesfully.")
+
 
     def modify_member() -> None:
         print("[!] Modifying member.")
@@ -133,6 +121,10 @@ class TrainerPass:
     def update_password() -> None:
         username = input("[!] Enter username: ")
         password = getpass.getpass("[!] Enter current password: ")
+
+        if db.check_password(username, password) == False:
+            input("Wrong credentials.")
+            return
 
         trainer = db.get_trainer_by_username(username)
 
