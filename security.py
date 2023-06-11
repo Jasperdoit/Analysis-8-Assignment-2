@@ -40,6 +40,10 @@ class security:
         # Regular expression pattern to validate email address
         pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
         return re.match(pattern, email) is not None
+    
+    def is_valid_zipcode(zipcode):
+        pattern = r'^\d{4}[A-Z]{2}$'
+        return re.match(pattern, zipcode) is not None
 
     def is_valid_phone_number(phone):
         # Regular expression pattern to validate phone number
@@ -80,4 +84,5 @@ class security:
         member_id = ''.join(str(digit) for digit in digits)
 
         return member_id
+    
 
