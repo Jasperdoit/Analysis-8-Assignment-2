@@ -86,14 +86,15 @@ def show_menu_options(menu_options, func):
         display.clearConsole()
         menu_options[user_input]()
     except Exception as e:
-        custom_error(func, e)
+        raise e
+        # custom_error(func, e)
     display.clearConsole()
     return func()
 
 
 def custom_error(func, e) -> None:
     display.clearConsole()
-    print("[!] Invalid input, please try again.")
+    print("[!] Exception occurred.")
     print('An exception occurred: {}'.format(e))
     input("show error 1")
 

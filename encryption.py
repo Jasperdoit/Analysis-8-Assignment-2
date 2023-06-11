@@ -1,4 +1,5 @@
 import os
+import hashlib
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -15,13 +16,15 @@ class Encryption:
 
     @staticmethod
     def load_private_key():
+        if Encryption.private_key is not None:
+            return Encryption.private_key
         while True:
             print("[!] Master password required")
             password = input("Please enter your master password: ")
-            password_hash = hashes.Hash(hashes.SHA256())
+            password_hash = hashlib.sha256(password.encode()).digest()
             with open('master_password', 'rb') as f:
                 correct_hash = f.read()
-                if correct_hash == password_hash.finalize():
+                if correct_hash == password_hash:
                     break
                 else:
                     print("Incorrect password.")
@@ -34,6 +37,8 @@ class Encryption:
 
     @staticmethod
     def load_public_key():
+        if Encryption.public_key is not None:
+            return Encryption.public_key
         with open('public.pem', 'rb') as f:
             public_key = serialization.load_pem_public_key(
                 f.read()
@@ -47,10 +52,10 @@ class Encryption:
         password = input("Please enter your master password: ")
         
         # Hash the password
-        digest = hashes.Hash(hashes.SHA256())
+        password_hash = hashlib.sha256(password.encode()).digest()
         # And store the hash in a file
         with open('master_password', 'wb') as f:
-            f.write(digest.finalize())
+            f.write(password_hash)
         
         # Generate the keys. Make sure the private key is secured with the password.
         private_key = rsa.generate_private_key(
@@ -74,9 +79,10 @@ class Encryption:
         with open('public.pem', 'wb') as f:
             f.write(public_pem)
     
-    def encrypt(self, message):
+    def encrypt(self, message : str):
+        message_bytes = message.encode()
         encrypted = Encryption.public_key.encrypt(
-            message,
+            message_bytes,
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA512(),
@@ -85,7 +91,7 @@ class Encryption:
         )
         return encrypted
     
-    def decrypt(self, message):
+    def decrypt(self, message : str):
         decrypted = Encryption.private_key.decrypt(
             message,
             padding.OAEP(
@@ -94,5 +100,5 @@ class Encryption:
                 label=None
             )
         )
-        return decrypted
+        return decrypted.decode('utf-8')
 
