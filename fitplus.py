@@ -6,6 +6,7 @@
 import os
 import sys
 import getpass
+from encryption import Encryption
 
 from logger import LogMessage
 from logger import Logger
@@ -190,4 +191,7 @@ if __name__ == "__main__":
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
     #database_setup.create_test_trainer()
+
+    encryption_library = Encryption()
+
     show_menu()
