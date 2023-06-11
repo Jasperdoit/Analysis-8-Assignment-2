@@ -21,7 +21,6 @@ class security:
         return gender.upper() in valid_genders
 
     def is_valid_number(value):
-        value = int(value)
         try:
             float(value)
             return True
@@ -34,7 +33,7 @@ class security:
             if validation_func(value):
                 return value
             else:
-                print("[!] Invalid input. Please try again.")
+                input("[!] Invalid input. Please try again.")
 
     def is_valid_email(email):
         # Regular expression pattern to validate email address
