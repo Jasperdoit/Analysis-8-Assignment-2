@@ -41,6 +41,13 @@ class Trainer:
         email = security.get_valid_input("[+] Enter email address: ", security.is_valid_email)
         phone = security.get_valid_input("[+] Enter phone number: ", security.is_valid_phone_number)
 
+        LogMessage()\
+            .set_username("...")\
+            .set_activity("Member Added")\
+            .set_info(f"Member '{first_name} {last_name}' was added to the system.")\
+            .set_not_suspicious()\
+            .create_log()
+
         db.add_member(memberid, first_name, last_name, age, gender, weight, street, housenumber, zipcode, city, email, phone)
         input("Added member succesfully.")
 
