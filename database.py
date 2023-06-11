@@ -11,12 +11,12 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE id LIKE ? OR
+            WHERE memberid LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                address LIKE ? OR
-                email LIKE ? OR
-                phone LIKE ?
+                zipcode LIKE ? OR
+                streetname LIKE ? OR
+                email LIKE ?
         """
 
         keyword = f"%{keyword}%"
@@ -37,12 +37,12 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE username LIKE ? OR
+            WHERE memberid LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                address LIKE ? OR
-                email LIKE ? OR
-                registration_date LIKE ?
+                zipcode LIKE ? OR
+                streetname LIKE ? OR
+                email LIKE ?
         """
 
         keyword = f"%{keyword}%"
@@ -55,8 +55,8 @@ class database:
             return result
 
 
-    def add_member(first_name, last_name, age, gender, weight,
-                    address, email, phone):
+    def add_member(memberid, first_name, last_name, age, gender, weight,
+                    streetname, zipcode, housenumber, city, email, phone):
             # Connect to the SQLite database
             conn = sqlite3.connect("fitplus.db")
             cursor = conn.cursor()
@@ -64,9 +64,9 @@ class database:
             # Insert the member data into the Members table
             cursor.execute(
                 """
-                INSERT INTO Members (first_name, last_name, age, gender, weight, address, email, phone)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (first_name, last_name, age, gender, weight, address,
+                INSERT INTO Members (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city, email, phone)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city,
                 email, phone))
 
             # Commit the changes and close the connection

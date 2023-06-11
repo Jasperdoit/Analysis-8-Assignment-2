@@ -31,6 +31,7 @@ class Trainer:
     def add_member() -> None:
         print("[!] Adding member.")
 
+        memberid = security.make_memberid()
         first_name = security.get_valid_input("[+] Enter first name: ", lambda value: value.strip() != "")
         last_name = security.get_valid_input("[+] Enter last name: ", lambda value: value.strip() != "")
         age = security.get_valid_input("[+] Enter age (number): ", security.is_valid_number)
@@ -43,7 +44,7 @@ class Trainer:
         email = security.get_valid_input("[+] Enter email address: ", security.is_valid_email)
         phone = security.get_valid_input("[+] Enter phone number: ", security.is_valid_phone_number)
 
-        db.add_member(first_name, last_name, age, gender, weight, address, email, phone)
+        db.add_member(memberid, first_name, last_name, age, gender, weight, street, housenumber, zipcode, city, email, phone)
         input("Added member succesfully.")
 
 
