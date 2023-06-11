@@ -23,6 +23,8 @@ class security:
     def is_valid_number(value):
         try:
             float(value)
+            if value < 0:
+                return False
             return True
         except ValueError:
             return False
