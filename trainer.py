@@ -145,6 +145,7 @@ class Trainer:
     
 class TrainerPass:
     def update_password() -> None:
+        print("[+] Updating password.")
         username = input("[!] Enter username: ")
         password = getpass.getpass("[!] Enter current password: ")
 

@@ -105,7 +105,7 @@ def display_error(error):
 
 def show_trainer_menu() -> None:
     trainer_options = {"1": TrainerPass.update_password, "2": Trainer.add_member, "3": Trainer.view_member,
-                       "4": Trainer.view_member, "5": login}
+                       "4": Trainer.view_member, "5": show_menu}
     print("[!] This is the trainer menu.")
     print("[+] Please Choose an option.")
     print("[1] Update password.")
@@ -121,7 +121,7 @@ def show_system_admin_menu() -> None:
                             "3": SystemAdmin.add_trainer,
                             "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
                             "9": SystemAdmin.add_member, "10": SystemAdmin.view_member,
-                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "14": Login}
+                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "14": show_menu}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -138,7 +138,7 @@ def show_system_admin_menu() -> None:
     print("[12] Delete member record.")
     print("[13] Search member.")
     print("[14] Logout" )
-    show_menu_options(system_admin_options, show_trainer_menu)
+    show_menu_options(system_admin_options, login)
 
 
 def show_super_admin_menu():
@@ -146,7 +146,7 @@ def show_super_admin_menu():
                            "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.modify_admin, "8": SuperAdmin.view_systemadmin,
                            "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
                            "13": SuperAdmin.add_member, "14": SuperAdmin.view_member, "15": SuperAdmin.delete_memberrecord, "16": SuperAdmin.view_member, 
-                           "17": Login}
+                           "17": show_menu}
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
