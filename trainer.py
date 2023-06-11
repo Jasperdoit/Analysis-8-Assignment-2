@@ -3,7 +3,7 @@ from datetime import datetime
 from display import display
 import getpass
 from security import security
-from logger import LogMessage
+from logger import LogMessages
 
 import getpass
 
@@ -41,12 +41,7 @@ class Trainer:
         email = security.get_valid_input("[+] Enter email address: ", security.is_valid_email)
         phone = security.get_valid_input("[+] Enter phone number (DDDDDDDD): ", security.is_valid_phone_number)
 
-        LogMessage()\
-            .set_username("...")\
-            .set_activity("Member Added")\
-            .set_info(f"Member '{first_name} {last_name}' was added to the system.")\
-            .set_not_suspicious()\
-            .create_log()
+        LogMessages.log_user_added("placeholder", f"{first_name} {last_name}")
 
         db.add_member(memberid, first_name, last_name, age, gender, weight, street, housenumber, zipcode, city, email, phone)
         input("Added member succesfully.")
@@ -93,6 +88,7 @@ class Trainer:
         elif choice == "11":
             Trainer.membermodifier("[!] Enter new gender (M/F/O): ", "gender", security.is_valid_gender, member)
         elif choice == "12":
+            LogMessages.log_user_modified("placeholder", member.username)
             return
         else:
             print("Invalid choice!")
@@ -170,3 +166,4 @@ class TrainerPass:
 
         from trainermodifier import trainermodifier
         trainermodifier.modify_trainer_password(trainer)
+        LogMessages.log_user_modified(username, username)
