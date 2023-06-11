@@ -151,7 +151,7 @@ def show_system_admin_menu() -> None:
 
 def show_super_admin_menu():
     super_admin_options = {"1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer,
-                           "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.modify_admin, "8": SuperAdmin.view_systemadmin,
+                           "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.view_systemadmin, "8": SuperAdmin.view_systemadmin,
                            "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
                            "13": SuperAdmin.add_member, "14": SuperAdmin.view_member, "15": SuperAdmin.delete_memberrecord, "16": SuperAdmin.view_member, 
                            "17": show_menu}

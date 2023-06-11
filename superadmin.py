@@ -40,9 +40,10 @@ class SuperAdmin(SystemAdmin):
     
     admin = database.get_systemadmin_by_keyword(keyword)
 
-    if admin is None:
+    if admin is None or admin[1] == "super_admin":
       input("SystemAdmin not found.")
       return
+    
     
     
     admin : SystemAdmin = SystemAdmin.from_tuple(admin)

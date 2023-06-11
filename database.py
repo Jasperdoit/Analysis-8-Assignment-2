@@ -270,7 +270,7 @@ class database:
             WHERE username LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                registration_date LIKE ? OR
+                registration_date LIKE ?
         """
 
         keyword = f"%{keyword}%"
@@ -337,7 +337,7 @@ class database:
             WHERE username LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
-                registration_date LIKE ? OR
+                registration_date LIKE ?
         """
 
         keyword = f"%{keyword}%"
