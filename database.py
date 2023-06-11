@@ -81,7 +81,7 @@ class database:
         cursor.execute("""
             DELETE FROM Members
             WHERE member_id = ?
-        """, memberid)
+        """, (memberid,))
 
         # Commit the changes and close the connection
         conn.commit()
