@@ -4,7 +4,7 @@ from passwordmanager import passwordmanager
 from typing import Optional
 
 class database:
-    def get_member(keyword : str) -> Optional[member.Member]:
+    def print_member(keyword : str):
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
@@ -26,7 +26,8 @@ class database:
         if result is None:
             return None
         else:
-            return member.Member(result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
+            print(result)
+            return
         
     
     def get_member_by_keyword(keyword : str) -> tuple:

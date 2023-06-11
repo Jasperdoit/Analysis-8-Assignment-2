@@ -83,16 +83,11 @@ class Trainer:
             input("Member not found.")
             return
         
-        member : Member = Member.from_tuple(trainer)
 
         display.clearConsole()
 
         print("[!] Member found.")
-        print(f"MemberID: {member.memberID}")
-        print(f"First name: {member.firstName}")
-        print(f"Last name: {member.lastName}")
-        print(f"Registration date: {member.registrationDate}")
-        print("")
+        db.print_member(keyword)
         print("[1] Modify member")
         print("[2] Delete member")
         print("[3] Go back")
