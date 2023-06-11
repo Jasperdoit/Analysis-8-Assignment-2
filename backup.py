@@ -3,10 +3,11 @@ import shutil
 import zipfile
 import glob
 from datetime import datetime
+from logger import LogMessages
 
 DATABASE_NAME = 'fitplus.db'
 ZIP_TEMP_NAME = 'temp.zip'
-LOGS_FOLDER_NAME ='./logs'
+LOGS_FOLDER_NAME = './logs'
 
 
 class Backup:
@@ -42,6 +43,8 @@ class Backup:
             return print(e)
         shutil.move('./temp.zip', './backup')
         os.rename('./backup/temp.zip', Backup.get_path(count))
+
+        LogMessages.log_user_created_backup("placeholder")
         input("[!] Backup created.")
 
     @staticmethod
@@ -64,4 +67,5 @@ class Backup:
         Backup.create_backup()
         with zipfile.ZipFile(latest_backup, 'r', zipfile.ZIP_DEFLATED) as zip_object:
             zipfile.ZipFile.extractall(zip_object, '.')
+        LogMessages.log_user_restored_backup("Placeholder")
         input("[!] Backup restored.")
