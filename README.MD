@@ -8,3 +8,6 @@
 # Julian van Dam (1038219)
 # Jasper Mulder (1026439)
 
+# Class:
+# INF2D
+
