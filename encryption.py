@@ -4,13 +4,17 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 class Encryption:
+    private_key = None
+    public_key = None
     def __init__(self):
         if not os.path.exists('private.pem') or not os.path.exists('public.pem'):
             self.create_initial()
-        self.private_key = self.load_private_key()
-        self.public_key = self.load_public_key()
+        Encryption.private_key = self.load_private_key()
+        Encryption.public_key = self.load_public_key()
 
-    def load_private_key(self):
+
+    @staticmethod
+    def load_private_key():
         while True:
             print("[!] Master password required")
             password = input("Please enter your master password: ")
@@ -28,14 +32,13 @@ class Encryption:
         )
 
 
-    
-    def load_public_key(self):
+    @staticmethod
+    def load_public_key():
         with open('public.pem', 'rb') as f:
             public_key = serialization.load_pem_public_key(
                 f.read()
             )
         return public_key
-    
     def create_initial(self):
         print("[!] Generating keys...")
         print("To generate the key, we need you to make a master password.")
@@ -72,7 +75,7 @@ class Encryption:
             f.write(public_pem)
     
     def encrypt(self, message):
-        encrypted = self.public_key.encrypt(
+        encrypted = Encryption.public_key.encrypt(
             message,
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -83,7 +86,7 @@ class Encryption:
         return encrypted
     
     def decrypt(self, message):
-        decrypted = self.private_key.decrypt(
+        decrypted = Encryption.private_key.decrypt(
             message,
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
