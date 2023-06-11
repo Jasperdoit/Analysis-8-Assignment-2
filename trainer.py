@@ -1,7 +1,7 @@
 from database import database as db
 from datetime import datetime
 from display import display
-from membermodifier import membermodifier
+import getpass
 from security import security
 from logger import LogMessage
 
@@ -77,7 +77,8 @@ class Trainer:
         elif choice == "7":
             Trainer.membermodifier("[!] Enter new zipcode (DDDDXX): ", "zipcode", lambda value: value.strip() != "", member)
         elif choice == "8":
-            Trainer.membermodifier("[!] Enter new city: ", "city", security.choose_city, member)
+            city = security.choose_city()
+            db.update_city(city, member)
         elif choice == "9":
             Trainer.membermodifier("[!] Enter new age: ", "age", security.is_valid_number, member)
         elif choice == "10":
@@ -134,13 +135,10 @@ class Trainer:
         return trainer
     
     def membermodifier(prompt, argument, func, member) -> None:
-        if func == security.choose_city():
-            security.choose_city
-        else:
-            while True:
-                value = input(prompt)
-                if func(value):
-                    break
+        while True:
+            value = input(prompt)
+            if func(value):
+                break
 
         db.update_member(value, argument, member)
     

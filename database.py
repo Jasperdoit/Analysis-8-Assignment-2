@@ -164,6 +164,20 @@ class database:
         # Commit the changes and close the connection
         conn.commit()
 
+    def update_city(value, member) -> None:
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            UPDATE members SET city = ? WHERE member_id = ?
+            """, (value, member[1],))
+
+
+        # Commit the changes and close the connection
+        conn.commit()
+
     def update_member(value, argument, member)-> None:
         # Connect to the database
         conn = sqlite3.connect("fitplus.db")
