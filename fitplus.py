@@ -27,7 +27,11 @@ def login() -> None:
 
     print("[!] Log in to Fitplus.")
     username = input("[+] Enter your username: ")
+    password = getpass.getpass("[+] Enter your password: ")
+
     display.clearConsole()
+
+
     if not security.is_valid_username(username) or not db.username_exists(username):
         tries += 1
 
@@ -36,10 +40,6 @@ def login() -> None:
         print("[1] Try again.")
         print("[2] Go back.")
         show_menu_options(menu_options, login)
-
-    password = getpass.getpass("[+] Enter your password: ")
-
-    display.clearConsole()
 
     if username != "super_admin":
         if not security.is_valid_password(password) or not db.check_password(username, password):
