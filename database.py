@@ -150,7 +150,7 @@ class database:
 
         
 
-    def delete_member(memberid : str):
+    def delete_member(memberid : str) -> None:
         # Connect to the database
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
@@ -163,6 +163,22 @@ class database:
 
         # Commit the changes and close the connection
         conn.commit()
+
+    def update_member(value, argument, member)-> None:
+        # Connect to the database
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Insert the member data into the Members table
+        cursor.execute(
+            """
+            UPDATE members SET {} = ? WHERE member_id = ?
+            """.format(argument), (value, member[1],))
+
+
+        # Commit the changes and close the connection
+        conn.commit()
+
 
     def username_exists(username : str) -> bool:
         """returns True if the username exists, False otherwise."""

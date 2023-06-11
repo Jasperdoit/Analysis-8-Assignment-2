@@ -53,7 +53,7 @@ class Trainer:
         print("[2] Modify lastname")
         print("[3] Modify phone")
         print("[4] Modify email")
-        print("[5] Modify street")
+        print("[5] Modify streetname")
         print("[6] Modify housenumber")
         print("[7] Modify zipcode")
         print("[8] Modify city")
@@ -65,27 +65,27 @@ class Trainer:
         choice = input("Enter choice: ")
 
         if choice == "1":
-            membermodifier.modify_member_firstname(member)
+            Trainer.membermodifier("[!] Enter new first name: ", "first_name", lambda value: value.strip() != "", member)
         elif choice == "2":
-            membermodifier.modify_member_lastname(member)
+            Trainer.membermodifier("[!] Enter new last name: ", "last_name", lambda value: value.strip() != "", member)
         elif choice == "3":
-            membermodifier.modify_member_phone(member)
+            Trainer.membermodifier("[!] Enter new phone number: ", "phone", security.is_valid_phone_number, member)
         elif choice == "4":
-            membermodifier.modify_member_email(member)
+            Trainer.membermodifier("[!] Enter new email address: ", "email", security.is_valid_email, member)
         elif choice == "5":
-            membermodifier.modify_member_street(member)
+            Trainer.membermodifier("[!] Enter new streetname: ", "streetname", lambda value: value.strip() != "" , member)
         elif choice == "6":
-            membermodifier.modify_member_housenumber(member)
+            Trainer.membermodifier("[!] Enter new housenumber: ", "house_number", security.is_valid_number, member)
         elif choice == "7":
-            membermodifier.modify_member_zipcode(member)
+            Trainer.membermodifier("[!] Enter new zipcode (DDDDXX): ", "zipcode", lambda value: value.strip() != "", member)
         elif choice == "8":
-            membermodifier.modify_member_city(member)
+            Trainer.membermodifier("[!] Enter new city: ", "city", security.choose_city, member)
         elif choice == "9":
-            membermodifier.modify_member_age(member)
+            Trainer.membermodifier("[!] Enter new age: ", "age", security.is_valid_number, member)
         elif choice == "10":
-            membermodifier.modify_member_weight(member)
+            Trainer.membermodifier("[!] Enter new weight (kg): ", "weight", security.is_valid_number, member)
         elif choice == "11":
-            membermodifier.modify_member_gender(member)
+            Trainer.membermodifier("[!] Enter new gender (M/F/O): ", "gender", security.is_valid_gender, member)
         elif choice == "12":
             return
         else:
@@ -134,6 +134,17 @@ class Trainer:
         trainer = Trainer(tuple[1], tuple[2], tuple[3], tuple[4], tuple[5])
         trainer.id = tuple[0]
         return trainer
+    
+    def membermodifier(prompt, argument, func, member) -> None:
+        if func == security.choose_city():
+            security.choose_city
+        else:
+            while True:
+                value = input(prompt)
+                if func(value):
+                    break
+
+        db.update_member(value, argument, member)
     
     
 class TrainerPass:
