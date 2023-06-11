@@ -2,8 +2,7 @@ import os
 import sys
 import getpass
 
-from logger import LogMessage
-from logger import Logger
+from logger import LogMessages
 from trainer import Trainer
 from database import database as db
 from systemadmin import SystemAdmin
@@ -23,8 +22,6 @@ def login() -> None:
     username = input("[+] Enter your username: ")
     display.clearConsole()
     if not security.is_valid_username(username) or not db.username_exists(username):
-        tries += 1
-
         menu_options = {"1": login, "2": show_menu}
         print("[!] Sorry this is not right please try again.")
         print("[1] Try again.")
@@ -51,12 +48,7 @@ def login() -> None:
             show_menu_options(menu_options, login)
 
     role = db.get_user_role(username)
-    LogMessage()\
-        .set_username(username)\
-        .set_activity("Logged in")\
-        .set_info("")\
-        .set_not_suspicious()\
-        .create_log()
+    LogMessages.log_user_logged_in(username)
 
     # Proceed with the appropriate actions based on the user's role
     if role == "trainer":
@@ -178,6 +170,11 @@ if __name__ == "__main__":
         os.mkdir('./logs')
     if not os.path.exists('./backup'):
         os.mkdir('./backup')
+
+    LogMessages().log_user_logged_in("test")
+    # LogMessages().log_user_logged_in("test2")
+    # LogMessages().log_user_logged_in("test3")
+    # Logger().show_log()
 
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
