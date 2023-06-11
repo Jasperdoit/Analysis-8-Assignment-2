@@ -120,7 +120,7 @@ def show_system_admin_menu() -> None:
                             "3": SystemAdmin.add_trainer,
                             "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
                             "7": Backup.create_backup, "8": Backup.restore_backup,
-                            "9": Logger.read_from_log,
+                            "9": Logger().show_log,
                             "10": SystemAdmin.add_member, "11": SystemAdmin.view_member,
                             "12": SystemAdmin.delete_memberrecord, "13": SystemAdmin.view_member, "14": show_menu}
     print("[!] This is the system admin menu.")
@@ -145,7 +145,7 @@ def show_system_admin_menu() -> None:
 def show_super_admin_menu() -> None:
     super_admin_options = {"1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer,
                            "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.view_systemadmin, "8": SuperAdmin.view_systemadmin,
-                           "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
+                           "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger().show_log,
                            "13": SuperAdmin.add_member, "14": SuperAdmin.view_member, "15": SuperAdmin.delete_memberrecord, "16": SuperAdmin.view_member, 
                            "17": show_menu}
     print("[!] This is the super admin menu.")
@@ -180,14 +180,8 @@ if __name__ == "__main__":
     if not os.path.exists('./backup'):
         os.mkdir('./backup')
 
-    LogMessages().log_user_logged_in("test")
-    # LogMessages().log_user_logged_in("test2")
-    # LogMessages().log_user_logged_in("test3")
-    # Logger().show_log()
-
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
-    #database_setup.create_test_trainer()
 
     encryption_library = Encryption()
 
