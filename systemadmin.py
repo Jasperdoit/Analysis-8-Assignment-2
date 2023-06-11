@@ -111,7 +111,7 @@ class SystemAdmin(Trainer):
     print("[!] Deleting member.")
     memberID = input("Enter MemberID of member to delete: ")
 
-    if database.get_member_by_keyword(memberID) == None:
+    if database.get_member_by_memberID(memberID) == None:
       input("[!] Member not found")
       return
 

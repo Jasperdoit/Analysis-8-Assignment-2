@@ -30,6 +30,46 @@ class database:
             print(result)
             return
         
+    import sqlite3
+
+    def get_member_by_memberID(keyword: str):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Retrieve the member from the Members table based on the member ID
+        cursor.execute("SELECT * FROM Members WHERE member_id = ?", (keyword,))
+        member = cursor.fetchone()
+
+        if member is None:
+            return None
+        else:
+            return member
+
+        conn.close()
+
+        return member
+
+
+        # Query to search for a member based on various fields
+        query = """
+            SELECT * FROM Members
+            WHERE member_id LIKE ? OR
+                first_name LIKE ? OR
+                last_name LIKE ? OR
+                zipcode LIKE ? OR
+                streetname LIKE ? OR
+                email LIKE ?
+        """
+
+        keyword = f"%{keyword}%"
+
+        cursor.execute(query, (keyword, keyword, keyword, keyword, keyword, keyword,))
+        result = cursor.fetchone()
+        if result is None:
+            return None
+        else:
+            return result
+        
     
     def get_member_by_keyword(keyword : str) -> tuple:
         """returns a tuple of the systemadmin's data if found, None otherwise."""
