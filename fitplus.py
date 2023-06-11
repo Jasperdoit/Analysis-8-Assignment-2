@@ -98,14 +98,14 @@ def show_menu_options(menu_options, func):
     return func()
 
 
-def custom_error(func, e):
+def custom_error(func, e) -> None:
     display.clearConsole()
     print("[!] Invalid input, please try again.")
     print('An exception occurred: {}'.format(e))
     input("show error 1")
 
 
-def display_error(error):
+def display_error(error) -> None:
     print(f"ERROR: {error}")
 
 
@@ -149,7 +149,7 @@ def show_system_admin_menu() -> None:
     show_menu_options(system_admin_options, show_system_admin_menu)
 
 
-def show_super_admin_menu():
+def show_super_admin_menu() -> None:
     super_admin_options = {"1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer,
                            "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.view_systemadmin, "8": SuperAdmin.view_systemadmin,
                            "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
