@@ -1,58 +1,40 @@
-# from database import Database
-import base64
-import os
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+from encryption import Encryption
 from datetime import datetime
 
+import os
+
 DELIMITER = ','
-KEY = 'g'
+
 
 class Logger:
-    def __init__(self):
-        self.key = "g"
-        self.delimiter = ","
-
-    @staticmethod
-    def _encrypt_message(lst: list[str]) -> str:
-        # XOR encryption
-        encrypted_message = ""
-        message = DELIMITER.join(lst)
-        for char in message:
-            encrypted_char = chr(ord(char) ^ ord(KEY))
-            encrypted_message += encrypted_char
-        return encrypted_message
-
-    @staticmethod
-    def _decrypt_message(encrypted_message: str) -> str:
-        # XOR decryption
-        decrypted_message = ""
-        for char in encrypted_message:
-            decrypted_char = chr(ord(char) ^ ord(KEY))
-            decrypted_message += decrypted_char
-        return decrypted_message
 
     @staticmethod
     def write_to_log(lst: list[str]):
         file_to_check = os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log')
-        encrypted_log = Logger._encrypt_message(lst)
-        encoded_log = base64.b64encode(encrypted_log.encode())
+        lst_to_string = ','.join(lst)
+        encrypted_log = Encryption().encrypt(lst_to_string)
         if os.path.exists(file_to_check):
-            with open(file_to_check, 'ab') as file:
-                file.write(encoded_log + b'\n')
+            with open(file_to_check, 'a') as file:
+                file.write(encrypted_log + '\n')
 
         else:
-            with open(file_to_check, 'wb') as file:
-                file.write(encoded_log + b'\n')
+            with open(file_to_check, 'w') as file:
+                file.write(encrypted_log + '\n')
 
     @staticmethod
-    def read_from_log(self):
+    def show_log():
         t = Table()
         data = list[list]()
-        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'rb') as file:
+        with open(os.path.abspath(f'./logs/Fitplus-{datetime.now().strftime("%Y-%m-%d")}.log'), 'r') as file:
             encoded_lines = file.readlines()
             for line in encoded_lines:
-                decoded_log = base64.b64decode(line)
-                decrypted_log = self._decrypt_message(decoded_log.decode())
-                data.append(decrypted_log.split(self.delimiter))
+                decrypted_log = Encryption().decrypt(line)
+                data.append(decrypted_log.split(DELIMITER))
         for line in data:
             t.add_row(line)
         t.print_table()
@@ -91,7 +73,7 @@ class LogMessage:
     def create_log(self) -> list[str]:
         log_message = f'{self.no},{self.date},{self.time},{self.username},{self.activity},{self.info},{self.suspicious}'.split(
             ',')
-        Logger.write_to_log(log_message)
+        Logger().write_to_log(log_message)
 
     def _get_log_length(self) -> int:
         try:
@@ -99,6 +81,48 @@ class LogMessage:
                 return len(file.readlines()) + 1
         except:
             return 1
+
+
+class LogMessages(LogMessage):
+    @staticmethod
+    def log_user_deleted(username: str, deleted_user: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity(f"User is deleted") \
+            .set_info(f"username: {deleted_user}") \
+            .set_not_suspicious()
+
+    @staticmethod
+    def log_user_modified(username: str, modified_user: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("User is modified") \
+            .set_info(f"username: {modified_user}") \
+            .set_not_suspicious()
+
+    @staticmethod
+    def log_user_added(username: str, added_user: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("User is created") \
+            .set_info(f"username: {added_user}") \
+            .set_not_suspicious()
+
+    @staticmethod
+    def log_user_logged_in(username: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("Logged in") \
+            .set_info(f"username: {username}") \
+            .set_not_suspicious()
+
+    @staticmethod
+    def log_user_logged_out(username: str):
+        LogMessage() \
+            .set_username(username) \
+            .set_activity("Logged out") \
+            .set_info(f"username: {username}") \
+            .set_not_suspicious()
 
 
 class Table:
@@ -139,5 +163,3 @@ class Table:
             print(row_row)
 
         print(border_row)
-
-
