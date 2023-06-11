@@ -18,30 +18,30 @@ class Member():
     # self.email = ""
     # self.phone = ""
 
-    def setFirstName(firstname: str) -> None:
+    def setFirstName(self, firstname: str) -> None:
         self.firstName: str = firstname
 
-    def setLastName(lastname: str) -> None:
+    def setLastName(self, lastname: str) -> None:
         self.lastName: str = lastname
 
-    def setAge(age: int) -> None:
+    def setAge(self, age: int) -> None:
         if (age < 16):
             return "error"
         self.age: int = age
 
-    def setGender(gender: str) -> str:
+    def setGender(self, gender: str) -> str:
         if gender != "M" and gender != "F":
             return "error"
         self.gender: str = gender
         return "sucess"
 
-    def setWeight(weight: str) -> None:
+    def setWeight(self, weight: str) -> None:
         self.weight: str = weight
 
-    def setEmail(email: str) -> None:
+    def setEmail(self, email: str) -> None:
         self.email: str = email
 
-    def setPhone(phone: str) -> None:
+    def setPhone(self, phone: str) -> None:
         self.phone: str = phone
 
 
@@ -56,14 +56,14 @@ class Member():
 
 class Address():
 
-    def setStreetName(streetName) -> None:
+    def setStreetName(self, streetName) -> None:
         self.streetName: str = streetName
 
-    def setHouseNumber(houseNumber) -> None:
+    def setHouseNumber(self, houseNumber) -> None:
         self.houseNumber: int = houseNumber
 
-    def setZipCode(zipCode) -> None:
+    def setZipCode(self, zipCode) -> None:
         self.zipCode: str = zipCode
 
-    def setCity(city) -> None:
+    def setCity(self, city) -> None:
         self.city: str = city

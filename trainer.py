@@ -1,14 +1,11 @@
-import os
-import re
-import sqlite3
-import hashlib
 from database import database as db
 from datetime import datetime
 from display import display
 from membermodifier import membermodifier
-import getpass
 from security import security
-# from trainermodifier import trainermodifier
+from logger import LogMessage
+
+import getpass
 
 class Trainer:
     def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
@@ -44,6 +41,7 @@ class Trainer:
         phone = security.get_valid_input("[+] Enter phone number: ", security.is_valid_phone_number)
 
         db.add_member(first_name, last_name, age, gender, weight, address, email, phone)
+
         input("Added member succesfully.")
 
 

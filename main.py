@@ -1,26 +1,33 @@
+import os
+import sys
+import getpass
+
+from logger import LogMessage
+from logger import Logger
 from trainer import Trainer
 from database import database as db
 from systemadmin import SystemAdmin
 from database_setup import database_setup
 from display import display
-import os
-import sys
 from security import security
-import getpass
 from trainer import TrainerPass
 from backup import Backup
 
 
-def Login() -> None:
+def login() -> None:
+    tries = 0
+
     print("[!] Log in to Fitplus.")
     username = input("[+] Enter your username: ")
     display.clearConsole()
     if not security.is_valid_username(username) or not db.username_exists(username):
-        menu_options = {"1": Login, "2": show_menu}
+        tries += 1
+
+        menu_options = {"1": login, "2": show_menu}
         print("[!] Sorry this is not right please try again.")
         print("[1] Try again.")
         print("[2] Go back.")
-        show_menu_options(menu_options, Login)
+        show_menu_options(menu_options, login)
 
     password = getpass.getpass("[+] Enter your password: ")
 
@@ -28,20 +35,26 @@ def Login() -> None:
 
     if username != "super_admin":
         if not security.is_valid_password(password) or not db.check_password(username, password):
-            menu_options = {"1": Login, "2": show_menu}
+            menu_options = {"1": login, "2": show_menu}
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
             print("[2] Go back.")
-            show_menu_options(menu_options, Login)
+            show_menu_options(menu_options, login)
     else:
         if not db.check_password(username, password):
-            menu_options = {"1": Login, "2": show_menu}
+            menu_options = {"1": login, "2": show_menu}
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
             print("[2] Go back.")
-            show_menu_options(menu_options, Login)
+            show_menu_options(menu_options, login)
 
     role = db.get_user_role(username)
+    LogMessage()\
+        .set_username(username)\
+        .set_activity("Logged in")\
+        .set_info("")\
+        .set_not_suspicious()\
+        .create_log()
 
     # Proceed with the appropriate actions based on the user's role
     if role == "trainer":
@@ -55,7 +68,7 @@ def Login() -> None:
 
 
 def show_menu() -> None:
-    menu_options = {"1": Login, "2": exit}
+    menu_options = {"1": login, "2": exit}
     display.clearConsole()
 
     print("[!] Welcome to Fitplus!")
@@ -90,7 +103,7 @@ def display_error(error):
 
 def show_trainer_menu() -> None:
     trainer_options = {"1": TrainerPass.update_password, "2": Trainer.add_member, "3": Trainer.view_member,
-                       "4": Trainer.view_member, "5": Login}
+                       "4": Trainer.view_member, "5": login}
     print("[!] This is the trainer menu.")
     print("[+] Please Choose an option.")
     print("[1] Update password.")
@@ -106,7 +119,7 @@ def show_system_admin_menu() -> None:
                             "3": SystemAdmin.add_trainer,
                             "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
                             "9": SystemAdmin.add_member, "10": SystemAdmin.view_member,
-                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "13": Login}
+                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "13": login}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -127,7 +140,7 @@ def show_system_admin_menu() -> None:
 
 def show_super_admin_menu():
     super_admin_options = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
-                           "5": Login, "10": Backup.create_backup, "11": Backup.restore_backup(),
+                           "5": login, "10": Backup.create_backup, "11": Backup.restore_backup(),
                            "15": db.delete_member}
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
@@ -148,7 +161,7 @@ def show_super_admin_menu():
     print("[15] Delete member record.")
     print("[16] Search member.")
     print("[17] Logout.")
-    show_menu_options(super_admin_options, Login)
+    show_menu_options(super_admin_options, login)
 
 
 def exit() -> None:
