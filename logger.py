@@ -33,6 +33,7 @@ class Logger:
         for line in data:
             t.add_row(line)
         t.print_table()
+        input("Press enter to continue.")
 
 
 class LogMessage:
