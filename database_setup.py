@@ -18,7 +18,7 @@ class database_setup:
                 password_hash TEXT NOT NULL,
                 first_name TEXT NULL,
                 last_name TEXT NULL,
-                registration_date TIMESTAMP NOT NULL
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
@@ -39,11 +39,11 @@ class database_setup:
                 member_id TEXT UNIQUE NOT NULL,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
-                age INTEGER NOT NULL,
+                age TEXT NOT NULL,
                 gender TEXT NOT NULL,
                 weight REAL NOT NULL,
                 streetname TEXT NOT NULL,
-                housenumber INTEGER NOT NULL,
+                housenumber TEXT NOT NULL,
                 zipcode TEXT NOT NULL,
                 city TEXT NOT NULL,
                 email TEXT NOT NULL,

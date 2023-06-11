@@ -68,10 +68,11 @@ class security:
         current_year = datetime.now().year % 100
 
         # Generate the first 7 digits randomly
-        digits = [random.randint(0, 9) for _ in range(7)]
+        digits = [current_year // 10, current_year % 10]
 
         # Append the year digits and calculate the checksum digit
-        digits.extend([current_year // 10, current_year % 10])
+        digits.extend([random.randint(0, 9) for _ in range(7)])
+
         checksum = sum(digits) % 10
         digits.append(checksum)
 
