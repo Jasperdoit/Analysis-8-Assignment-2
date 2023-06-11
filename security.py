@@ -84,4 +84,5 @@ class security:
         member_id = ''.join(str(digit) for digit in digits)
 
         return member_id
+    
 

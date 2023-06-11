@@ -28,7 +28,11 @@ def login() -> None:
 
     print("[!] Log in to Fitplus.")
     username = input("[+] Enter your username: ")
+    password = getpass.getpass("[+] Enter your password: ")
+
     display.clearConsole()
+
+
     if not security.is_valid_username(username) or not db.username_exists(username):
         tries += 1
 
@@ -37,10 +41,6 @@ def login() -> None:
         print("[1] Try again.")
         print("[2] Go back.")
         show_menu_options(menu_options, login)
-
-    password = getpass.getpass("[+] Enter your password: ")
-
-    display.clearConsole()
 
     if username != "super_admin":
         if not security.is_valid_password(password) or not db.check_password(username, password):
@@ -99,14 +99,14 @@ def show_menu_options(menu_options, func):
     return func()
 
 
-def custom_error(func, e):
+def custom_error(func, e) -> None:
     display.clearConsole()
     print("[!] Invalid input, please try again.")
     print('An exception occurred: {}'.format(e))
     input("show error 1")
 
 
-def display_error(error):
+def display_error(error) -> None:
     print(f"ERROR: {error}")
 
 
@@ -150,7 +150,7 @@ def show_system_admin_menu() -> None:
     show_menu_options(system_admin_options, show_system_admin_menu)
 
 
-def show_super_admin_menu():
+def show_super_admin_menu() -> None:
     super_admin_options = {"1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer,
                            "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.view_systemadmin, "8": SuperAdmin.view_systemadmin,
                            "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
