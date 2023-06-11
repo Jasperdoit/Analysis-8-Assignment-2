@@ -2,7 +2,6 @@ import member
 import sqlite3
 from passwordmanager import passwordmanager
 from typing import Optional
-from encryption import Encryption
 
 class database:
     def print_member(keyword : str):
@@ -30,20 +29,6 @@ class database:
             print(result)
             return
         
-    import sqlite3
-
-    def get_member_by_memberID(keyword: str):
-        conn = sqlite3.connect("fitplus.db")
-        cursor = conn.cursor()
-
-        # Retrieve the member from the Members table based on the member ID
-        cursor.execute("SELECT * FROM Members WHERE member_id = ?", (keyword,))
-        member = cursor.fetchone()
-
-        if member is None:
-            return None
-        else:
-            return member
     
     def get_member_by_keyword(keyword : str) -> tuple:
         """returns a tuple of the systemadmin's data if found, None otherwise."""
@@ -76,20 +61,6 @@ class database:
             # Connect to the SQLite database
             conn = sqlite3.connect("fitplus.db")
             cursor = conn.cursor()
-
-            encryption = Encryption()
-
-            first_name = encryption.encrypt(first_name)
-            last_name = encryption.encrypt(last_name)
-            age = encryption.encrypt(age)
-            gender = encryption.encrypt(gender)
-            weight = encryption.encrypt(weight)
-            streetname = encryption.encrypt(streetname)
-            zipcode = encryption.encrypt(zipcode)
-            housenumber = encryption.encrypt(housenumber)
-            city = encryption.encrypt(city)
-            email = encryption.encrypt(email)
-            phone = encryption.encrypt(phone)
 
             # Insert the member data into the Members table
             cursor.execute(
@@ -316,14 +287,12 @@ class database:
         conn = sqlite3.connect("fitplus.db")
         cursor = conn.cursor()
 
-        encryption = Encryption()
-
         # Insert the member data into the Members table
         cursor.execute(
             """
             INSERT INTO Trainers (username, password_hash, first_name, last_name, registration_date)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (encryption.encrypt(trainer[0]), encryption.encrypt(trainer[1]), encryption.encrypt(trainer[2]), encryption.encrypt(trainer[3]), encryption.encrypt(trainer[4]),))
+        """, (trainer[0], trainer[1], trainer[2], trainer[3], trainer[4],))
 
         # Commit the changes and close the connection
         conn.commit()
