@@ -129,5 +129,3 @@ class AdminPass:
 
         from adminmodifier import adminmodifier
         adminmodifier.modify_systemadmin_password(admin)
-
-  

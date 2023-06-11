@@ -12,6 +12,7 @@ from database_setup import database_setup
 from display import display
 from security import security
 from trainer import TrainerPass
+from systemadmin import AdminPass
 from backup import Backup
 from logger import Logger
 
@@ -117,11 +118,13 @@ def show_trainer_menu() -> None:
 
 
 def show_system_admin_menu() -> None:
-    system_admin_options = {"1": SystemAdmin.update_password, "2": SystemAdmin.check_users,
+    system_admin_options = {"1": AdminPass.update_password, "2": SystemAdmin.check_users,
                             "3": SystemAdmin.add_trainer,
                             "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
-                            "9": SystemAdmin.add_member, "10": SystemAdmin.view_member,
-                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "14": show_menu}
+                            "7": Backup.create_backup, "8": Backup.restore_backup,
+                            "9": Logger.read_from_log,
+                            "10": SystemAdmin.add_member, "11": SystemAdmin.view_member,
+                            "12": SystemAdmin.delete_memberrecord, "13": SystemAdmin.view_member, "14": show_menu}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
