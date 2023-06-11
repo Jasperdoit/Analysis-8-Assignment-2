@@ -1,100 +1,96 @@
-import os
-import sys
-import sqlite3
-import hashlib
-import re
-import random
 from trainer import Trainer
-from membermodifier import membermodifier
 from database import database as db
 from systemadmin import SystemAdmin
-from superadmin import SuperAdmin
-from string import ascii_letters, digits, punctuation
 from database_setup import database_setup
 from display import display
 import os
 import sys
-from passwordmanager import passwordmanager
 from security import security
 import getpass
 from trainer import TrainerPass
 from backup import Backup
 
+
 def Login() -> None:
     print("[!] Log in to Fitplus.")
     username = input("[+] Enter your username: ")
     display.clearConsole()
-    if not security.is_valid_username(username) or db.username_exists(username) == False:
-        menuOptions = { "1": Login, "2": ShowMenu }
+    if not security.is_valid_username(username) or not db.username_exists(username):
+        menu_options = {"1": Login, "2": show_menu}
         print("[!] Sorry this is not right please try again.")
         print("[1] Try again.")
         print("[2] Go back.")
-        showMenuOptions(menuOptions, Login)
-            
+        show_menu_options(menu_options, Login)
+
     password = getpass.getpass("[+] Enter your password: ")
 
     display.clearConsole()
 
-
     if username != "super_admin":
-        if security.is_valid_password(password) == False or db.check_password(username, password) == False:
-            menuOptions = { "1": Login, "2": ShowMenu }
+        if not security.is_valid_password(password) or not db.check_password(username, password):
+            menu_options = {"1": Login, "2": show_menu}
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
             print("[2] Go back.")
-            showMenuOptions(menuOptions, Login)
+            show_menu_options(menu_options, Login)
     else:
-        if db.check_password(username, password) == False:
-            menuOptions = { "1": Login, "2": ShowMenu }
+        if not db.check_password(username, password):
+            menu_options = {"1": Login, "2": show_menu}
             print("[!] Sorry this is not right please try again.")
             print("[1] Try again.")
             print("[2] Go back.")
-            showMenuOptions(menuOptions, Login)
+            show_menu_options(menu_options, Login)
 
     role = db.get_user_role(username)
 
     # Proceed with the appropriate actions based on the user's role
     if role == "trainer":
-        showTrainerMenu()
+        show_trainer_menu()
     elif role == "system_admin":
-        showSystemAdminMenu()
+        show_system_admin_menu()
     elif role == "super_admin":
-        showSuperAdminMenu()
+        show_super_admin_menu()
     else:
-        DisplayError("Invalid user role.")
-        
-def ShowMenu() -> None:
-    menuOptions = { "1": Login, "2": Exit }
+        display_error("Invalid user role.")
+
+
+def show_menu() -> None:
+    menu_options = {"1": Login, "2": exit}
     display.clearConsole()
 
     print("[!] Welcome to Fitplus!")
     print("[+] Please Choose an option.")
     print("[1] Log in")
     print("[2] Exit")
-    showMenuOptions(menuOptions, ShowMenu)
+    show_menu_options(menu_options, show_menu)
 
-def showMenuOptions(menuOptions, func):
+
+def show_menu_options(menu_options, func):
     try:
-        userInput = input("[?] Option: ")
-        assert 0 < int(userInput) <= len(menuOptions)
+        user_input = input("[?] Option: ")
+        assert 0 < int(user_input) <= len(menu_options)
         display.clearConsole()
-        menuOptions[userInput]()
+        menu_options[user_input]()
     except Exception as e:
-        customError(func, e)
+        custom_error(func, e)
     display.clearConsole()
     return func()
 
-def customError(func, e):
+
+def custom_error(func, e):
     display.clearConsole()
     print("[!] Invalid input, please try again.")
     print('An exception occurred: {}'.format(e))
     input("show error 1")
 
-def DisplayError(error):
+
+def display_error(error):
     print(f"ERROR: {error}")
 
-def showTrainerMenu() -> None:
-    trainerOptions = { "1": TrainerPass.update_password, "2": Trainer.add_member, "3": Trainer.view_member, "4": Trainer.view_member, "5": Login }
+
+def show_trainer_menu() -> None:
+    trainer_options = {"1": TrainerPass.update_password, "2": Trainer.add_member, "3": Trainer.view_member,
+                       "4": Trainer.view_member, "5": Login}
     print("[!] This is the trainer menu.")
     print("[+] Please Choose an option.")
     print("[1] Update password.")
@@ -102,10 +98,15 @@ def showTrainerMenu() -> None:
     print("[3] Modify member.")
     print("[4] Search member.")
     print("[5] Logout.")
-    showMenuOptions(trainerOptions, showTrainerMenu)
+    show_menu_options(trainer_options, show_trainer_menu)
 
-def showSystemAdminMenu() -> None:
-    systemAdminOptions = { "1": SystemAdmin.update_password, "2": SystemAdmin.check_users, "3": SystemAdmin.add_trainer, "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer, "9": SystemAdmin.add_member, "10": SystemAdmin.view_member, "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "13": Login}
+
+def show_system_admin_menu() -> None:
+    system_admin_options = {"1": SystemAdmin.update_password, "2": SystemAdmin.check_users,
+                            "3": SystemAdmin.add_trainer,
+                            "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
+                            "9": SystemAdmin.add_member, "10": SystemAdmin.view_member,
+                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "13": Login}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -121,11 +122,13 @@ def showSystemAdminMenu() -> None:
     print("[11] Modify members.")
     print("[12] Delete member record.")
     print("[13] Search member.")
-    showMenuOptions(systemAdminOptions, showTrainerMenu)
+    show_menu_options(system_admin_options, show_trainer_menu)
 
-def showSuperAdminMenu():
-    superAdminOptions = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
-                         "5": Login, "10": Backup.create_backup, "11": Backup.restore_backup(), "15": db.delete_member}
+
+def show_super_admin_menu():
+    super_admin_options = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
+                           "5": Login, "10": Backup.create_backup, "11": Backup.restore_backup(),
+                           "15": db.delete_member}
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -145,10 +148,12 @@ def showSuperAdminMenu():
     print("[15] Delete member record.")
     print("[16] Search member.")
     print("[17] Logout.")
-    showMenuOptions(superAdminOptions, Login)
+    show_menu_options(super_admin_options, Login)
 
-def Exit() -> None:
+
+def exit() -> None:
     sys.exit()
+
 
 if __name__ == "__main__":
     if not os.path.exists('./logs'):
@@ -159,4 +164,4 @@ if __name__ == "__main__":
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
     database_setup.create_test_trainer()
-    ShowMenu()
+    show_menu()
