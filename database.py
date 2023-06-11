@@ -11,7 +11,7 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE memberid LIKE ? OR
+            WHERE member_id LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
                 zipcode LIKE ? OR
@@ -38,7 +38,7 @@ class database:
         # Query to search for a member based on various fields
         query = """
             SELECT * FROM Members
-            WHERE memberid LIKE ? OR
+            WHERE member_id LIKE ? OR
                 first_name LIKE ? OR
                 last_name LIKE ? OR
                 zipcode LIKE ? OR
@@ -65,13 +65,27 @@ class database:
             # Insert the member data into the Members table
             cursor.execute(
                 """
-                INSERT INTO Members (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city, email, phone)
+                INSERT INTO Members (member_id, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city, email, phone)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (memberid, first_name, last_name, age, gender, weight, streetname, zipcode, housenumber, city,
                 email, phone))
 
             # Commit the changes and close the connection
             conn.commit()
+
+    def delete_member(memberid):
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        # Delete the member based on the entire row data
+        cursor.execute("""
+            DELETE FROM Members
+            WHERE member_id = ?
+        """, memberid)
+
+        # Commit the changes and close the connection
+        conn.commit()
+        conn.close()
     
     def get_all_trainers() -> Optional[list]:
         conn = sqlite3.connect("fitplus.db")
@@ -184,6 +198,25 @@ class database:
 
         query = """
             SELECT * FROM Trainers WHERE username = ?
+        """
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result is None:
+            return None
+        else:
+            return result
+        
+
+    def get_admin_by_username(username : str)-> tuple:
+
+        conn = sqlite3.connect("fitplus.db")
+        cursor = conn.cursor()
+
+        query = """
+            SELECT * FROM systemadmin WHERE username = ?
         """
         cursor.execute(query, (username,))
         result = cursor.fetchone()

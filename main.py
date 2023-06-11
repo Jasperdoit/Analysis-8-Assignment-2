@@ -1,6 +1,7 @@
 from trainer import Trainer
 from database import database as db
 from systemadmin import SystemAdmin
+from superadmin import SuperAdmin
 from database_setup import database_setup
 from display import display
 import os
@@ -9,6 +10,7 @@ from security import security
 import getpass
 from trainer import TrainerPass
 from backup import Backup
+from logger import Logger
 
 
 def Login() -> None:
@@ -106,7 +108,7 @@ def show_system_admin_menu() -> None:
                             "3": SystemAdmin.add_trainer,
                             "4": SystemAdmin.view_trainer, "5": SystemAdmin.view_trainer, "6": SystemAdmin.view_trainer,
                             "9": SystemAdmin.add_member, "10": SystemAdmin.view_member,
-                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "13": Login}
+                            "11": SystemAdmin.delete_memberrecord, "12": SystemAdmin.view_member, "14": Login}
     print("[!] This is the system admin menu.")
     print("[+] Please choose an option.")
     print("[1] Update password.")
@@ -122,13 +124,16 @@ def show_system_admin_menu() -> None:
     print("[11] Modify members.")
     print("[12] Delete member record.")
     print("[13] Search member.")
+    print("[14] Logout" )
     show_menu_options(system_admin_options, show_trainer_menu)
 
 
 def show_super_admin_menu():
-    super_admin_options = {"1": tr.update_password, "2": tr.add_member, "3": tr.modify_member, "4": tr.search_member,
-                           "5": Login, "10": Backup.create_backup, "11": Backup.restore_backup(),
-                           "15": db.delete_member}
+    super_admin_options = {"1": SuperAdmin.check_users, "2": SuperAdmin.add_trainer, "3": SuperAdmin.view_trainer, "4": SuperAdmin.view_trainer,
+                           "5": SuperAdmin.view_trainer, "6": SuperAdmin.add_systemadmin, "7": SuperAdmin.modify_admin, "8": SuperAdmin.view_systemadmin,
+                           "9": SuperAdmin.view_systemadmin, "10": Backup.create_backup, "11": Backup.restore_backup, "12": Logger.read_from_log,
+                           "13": SuperAdmin.add_member, "14": SuperAdmin.view_member, "15": SuperAdmin.delete_memberrecord, "16": SuperAdmin.view_member, 
+                           "17": Login}
     print("[!] This is the super admin menu.")
     print("[+] Please choose an option.")
     print("[1] Check users.")
@@ -163,5 +168,5 @@ if __name__ == "__main__":
 
     database_setup.setup_database()
     database_setup.setup_superadmin("super_admin", "Admin_123!")
-    database_setup.create_test_trainer()
+    #database_setup.create_test_trainer()
     show_menu()

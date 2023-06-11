@@ -8,7 +8,6 @@ from display import display
 from membermodifier import membermodifier
 import getpass
 from security import security
-# from trainermodifier import trainermodifier
 
 class Trainer:
     def __init__(self, username : str, password : str, firstName : str, lastName : str, registrationDate : datetime = datetime.now()):
@@ -48,29 +47,49 @@ class Trainer:
         input("Added member succesfully.")
 
 
-    def modify_member() -> None:
+    def modify_member(member) -> None:
         print("[!] Modifying member.")
         print("[1] Modify firstname")
         print("[2] Modify lastname")
         print("[3] Modify phone")
         print("[4] Modify email")
-        print("[5] Modify address")
-        print("[5] Go back")
+        print("[5] Modify street")
+        print("[6] Modify housenumber")
+        print("[7] Modify zipcode")
+        print("[8] Modify city")
+        print("[9] Modify age")
+        print("[10] Modify weight")
+        print("[11] Modify gender")
+        print("[12] Go back")
 
         choice = input("Enter choice: ")
 
         if choice == "1":
-            membermodifier.modify_member_username(trainer)
+            membermodifier.modify_member_firstname(member)
         elif choice == "2":
-            membermodifier.modify_member_password(trainer)
+            membermodifier.modify_member_lastname(member)
         elif choice == "3":
-            membermodifier.modify_member_firstname(trainer)
+            membermodifier.modify_member_phone(member)
         elif choice == "4":
-            membermodifier.modify_member_lastname(trainer)
+            membermodifier.modify_member_email(member)
         elif choice == "5":
+            membermodifier.modify_member_street(member)
+        elif choice == "6":
+            membermodifier.modify_member_housenumber(member)
+        elif choice == "7":
+            membermodifier.modify_member_zipcode(member)
+        elif choice == "8":
+            membermodifier.modify_member_city(member)
+        elif choice == "9":
+            membermodifier.modify_member_age(member)
+        elif choice == "10":
+            membermodifier.modify_member_weight(member)
+        elif choice == "11":
+            membermodifier.modify_member_gender(member)
+        elif choice == "12":
             return
         else:
-            input("[!] Invalid choice.")
+            print("Invalid choice!")
             return
     
     def view_member() -> None:
@@ -82,7 +101,6 @@ class Trainer:
         if member is None:
             input("Member not found.")
             return
-        
 
         display.clearConsole()
 
@@ -96,8 +114,13 @@ class Trainer:
 
         if choice == "1":
             Trainer.modify_member(member)
+            input("Member modified succesfully")
+            return
         elif choice == "2":
-            membermodifier.delete_member(member)
+            memberid = member[1]
+            db.delete_member(memberid)
+            input("Member deleted succesfully")
+            return
         elif choice == "3":
             return
         else:
