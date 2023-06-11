@@ -90,7 +90,8 @@ class LogMessages(LogMessage):
             .set_username(username) \
             .set_activity(f"User is deleted") \
             .set_info(f"username: {deleted_user}") \
-            .set_not_suspicious()
+            .set_not_suspicious() \
+            .create_log()
 
     @staticmethod
     def log_user_modified(username: str, modified_user: str):
@@ -98,7 +99,8 @@ class LogMessages(LogMessage):
             .set_username(username) \
             .set_activity("User is modified") \
             .set_info(f"username: {modified_user}") \
-            .set_not_suspicious()
+            .set_not_suspicious() \
+            .create_log()
 
     @staticmethod
     def log_user_added(username: str, added_user: str):
@@ -106,7 +108,8 @@ class LogMessages(LogMessage):
             .set_username(username) \
             .set_activity("User is created") \
             .set_info(f"username: {added_user}") \
-            .set_not_suspicious()
+            .set_not_suspicious() \
+            .create_log()
 
     @staticmethod
     def log_user_logged_in(username: str):
@@ -114,7 +117,8 @@ class LogMessages(LogMessage):
             .set_username(username) \
             .set_activity("Logged in") \
             .set_info(f"username: {username}") \
-            .set_not_suspicious()
+            .set_not_suspicious() \
+            .create_log()
 
     @staticmethod
     def log_user_logged_out(username: str):
@@ -122,7 +126,8 @@ class LogMessages(LogMessage):
             .set_username(username) \
             .set_activity("Logged out") \
             .set_info(f"username: {username}") \
-            .set_not_suspicious()
+            .set_not_suspicious() \
+            .create_log()
 
 
 class Table:
