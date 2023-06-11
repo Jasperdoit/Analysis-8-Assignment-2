@@ -17,9 +17,9 @@ class SystemAdmin(Trainer):
     trainers : list[Trainer] = database.get_all_trainers() or list()
     systemadmins : list[SystemAdmin] = database.get_all_systemadmins() or list()
     for trainer in trainers:
-      print(f"Trainer: {trainer[1]} - {trainer[3]}")
+      print(f"Trainer: {trainer[1]} - {database.get_user_role(trainer[1])}")
     for systemadmin in systemadmins:
-      print(f"SystemAdmin: {systemadmin[1], systemadmin[6]}")
+      print(f"SystemAdmin: {systemadmin[1]} - {database.get_user_role(systemadmin[1])}")
     input("Press enter to continue...")
 
   def add_trainer() -> None:
@@ -40,8 +40,7 @@ class SystemAdmin(Trainer):
     lastName = input("[+] Enter last name: ")
     trainer = Trainer(username, password, firstName, lastName)
     database.add_trainer(trainer.to_tuple())
-    print("[+] Trainer added.")
-    input("Press enter to continue...")
+    print("[+] Trainer added succesfully.")
 
   def view_trainer() -> None:
     print("[!] Viewing trainer.")
@@ -109,7 +108,15 @@ class SystemAdmin(Trainer):
       return
     
   def delete_memberrecord() -> None:
-    database.delete_member()
+    print("[!] Deleting member.")
+    memberID = input("Enter MemberID of member to delete: ")
+
+    if database.get_member_by_keyword(memberID) == None:
+      input("[!] Member not found")
+      return
+
+    database.delete_member(memberID)
+    input("Member removed succesfully.")
 
 
 class AdminPass:

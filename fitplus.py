@@ -146,7 +146,7 @@ def show_system_admin_menu() -> None:
     print("[12] Delete member record.")
     print("[13] Search member.")
     print("[14] Logout" )
-    show_menu_options(system_admin_options, login)
+    show_menu_options(system_admin_options, show_system_admin_menu)
 
 
 def show_super_admin_menu():
@@ -174,7 +174,7 @@ def show_super_admin_menu():
     print("[15] Delete member record.")
     print("[16] Search member.")
     print("[17] Logout.")
-    show_menu_options(super_admin_options, login)
+    show_menu_options(super_admin_options, show_super_admin_menu)
 
 
 def exit() -> None:
